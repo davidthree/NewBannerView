@@ -1,0 +1,6 @@
+framework module Pods_DVBannerView {
+  umbrella header "Pods-DVBannerView-umbrella.h"
+
+  export *
+  module * { export * }
+}
