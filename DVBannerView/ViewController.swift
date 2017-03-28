@@ -10,23 +10,43 @@ import UIKit
 import Alamofire
 
 class DVMessageModel: NSObject {
+    var id:NSNumber = 0
+    var sortid:String = ""
     var title:String = ""
-    var year:String = ""
-    var image:String = ""
-    var alt:String = ""
+    var titlesub:String = ""
+    var type:NSNumber = 0
+    var source:String = ""
+    var date:String = ""
+    var datefolder:String = ""
+    var url:String = ""
+    var pic:String = ""
+    var piclarge:String = ""
+    var picmore:String = ""
+    var iscommend:NSNumber = 0
+    var istop:NSNumber = 0
+    var summary:String = ""
+}
+class DVBannerModel: NSObject {
+    var newsid:String = ""
+    var datefolder:String = ""
+    var praise:NSNumber = 0
+    var title:String = ""
+    var newstitle:String = ""
+    var url:String = ""
+    var pic:String = ""
+    var summary:String = ""
 }
 
 class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate {
-
-    @IBOutlet weak var searchButton: UIBarButtonItem!
-    public let MainBounds:CGRect = UIScreen.main.bounds
+    
     private let TableViewHeaderHeight:CGFloat = 200.0
-    /*
-     * Banner 图片和文字数组
-     */
-    private var photoUrlArray = [String]()
-    private var textArray = [String]()
-    private var ListArray = [DVMessageModel]()
+    @IBOutlet weak var searchButton: UIBarButtonItem!
+ 
+//    private var photoUrlArray = [String]()
+//    private var textArray = [String]()
+    
+    private var bannerArray = [DVBannerModel]()
+    private var listArray = [DVMessageModel]()
     private var searchBar = UISearchBar()
     
     //MARK:懒加载
@@ -38,7 +58,13 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         return tableView
     }()
     lazy var bannerView: DVBannerView = {
-        let view = DVBannerView.init(photoArray: self.photoUrlArray, textArray: self.textArray ,viewHeight:200.0)
+        let view = DVBannerView.init(viewHeight:200.0)
+        view.myFunc = {(index) -> Void in
+            let web = WebViewViewController()
+            let model = self.bannerArray[index]
+            web.url = model.url
+            self.navigationController!.pushViewController(web, animated: true)
+        }
         return view
     }()
     //MARK:内部方法
@@ -52,7 +78,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         self.view.backgroundColor = UIColor.init(colorLiteralRed: 245/255.0, green: 245/255.0, blue: 245/255.0, alpha: 1)
         self.setupView()
         self.setupData()
-        
     }
     func setupView() {
         
@@ -65,7 +90,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             make.height.equalTo(44)
         }
         self.searchBar.placeholder = "search"
-        
         self.searchBar.delegate = self
         self.searchBar.setShowsCancelButton(true, animated: true)
         self.searchBar.backgroundColor = UIColor.white
@@ -86,52 +110,79 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         let context = UIGraphicsGetCurrentContext()
         context!.setFillColor(color.cgColor)
         context!.fill(rect);
-        
         let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext();
-        
         return image;
     }
     func setupData(){
-        for i in 1...6 {
-            let strA = String(format:"https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-\(i).jpg")
-            self.photoUrlArray.append(strA)
-            self.textArray.append("\(i)")
-        }
-        Alamofire.request("https://api.douban.com/v2/movie/top250?start=100", method: .get, parameters: nil, encoding: JSONEncoding.default).responseJSON { (response) in
-            switch response.result
-            {
-            case.success(let json):
-                let subjectsArray = (json as! Dictionary<String,AnyObject>)["subjects"] as! NSArray
-                for d in subjectsArray
-                {
-                    let model = DVMessageModel()
-                    model.title = (d as! Dictionary<String,AnyObject>)["original_title"] as! String
-                    model.image = ((d as! Dictionary<String,AnyObject>)["images"] as! Dictionary<String,AnyObject>)["small"] as! String
-                    model.year = (d as! Dictionary<String,AnyObject>)["year"] as! String
-                    self.ListArray.append(model)
-                    model.alt = (d as! Dictionary<String,AnyObject>)["alt"] as! String
-                }
-            case.failure(let error):
-                print("\(error)")
+        
+        let request = DVNewworkRequest()
+        request.getRequest(urlString: MSG_pathList as String, params:[:], success: { (response) in
+            let dataArray = response["data"] as! [Dictionary<String,AnyObject>]
+            self.listArray.removeAll()
+            for dataDic in dataArray{
+                let model = DVMessageModel()
+                model.id = dataDic ["id"] as! NSNumber
+                model.sortid = dataDic["sortid"] as! String
+                model.title = dataDic["title"] as! String
+                model.titlesub = dataDic["titlesub"] as! String
+                model.type = dataDic["type"] as! NSNumber
+                model.source = dataDic["source"] as! String
+                model.date = dataDic["date"] as! String
+                model.datefolder = dataDic["datefolder"] as! String
+                model.url = dataDic["url"] as! String
+                model.pic = dataDic["pic"] as! String
+                model.piclarge = dataDic["piclarge"] as! String
+                model.picmore = dataDic["picmore"] as! String
+                model.iscommend = dataDic["iscommend"] as! NSNumber
+                model.istop = dataDic["istop"] as! NSNumber
+                model.summary = dataDic["summary"] as! String
+                self.listArray.append(model)
             }
             self.mainTableView.reloadData()
+        }) { (error) in
+            
         }
         
-        
+        request.getRequestReturnArray(urlString: MSG_pathSlide as String, params: [:], success: { (response) in
+            self.bannerArray.removeAll()
+            for dataDic in response{
+                let model = DVBannerModel()
+                model.newsid = dataDic["newsid"] as! String
+                model.datefolder = dataDic["datefolder"] as! String
+                model.praise = dataDic["praise"] as! NSNumber
+                model.title = dataDic["title"] as! String
+                model.newstitle = dataDic["newstitle"] as! String
+                model.url = dataDic["url"] as! String
+                model.pic = dataDic["pic"] as! String
+                model.summary = dataDic["summary"] as! String
+                self.bannerArray.append(model)
+            }
+            self.bannerView.setBanner(self.bannerArray)
+        }) { (error) in
+            
+        }
     }
+    //MARK:点击方法
     @IBAction func searchAction(_ sender: Any)
     {
         self.searchBar.becomeFirstResponder()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
     }
     //MARK:代理方法
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
+    {
+        self.searchBar.resignFirstResponder()
         self.searchBar.text = ""
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("result clicked")
+        let searchView = DVSearchViewController()
+        searchView.ListArray = self.listArray
+        self.navigationController!.pushViewController(searchView, animated: true)
+        self.searchBar.text = ""
+        self.searchBar.resignFirstResponder()
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -142,8 +193,22 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return self.bannerView
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return TableViewHeaderHeight
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.ListArray.count
+        return self.listArray.count
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        let web = WebViewViewController()
+        let model = self.listArray[indexPath.row]
+        web.url = model.url
+        self.navigationController!.pushViewController(web, animated: true)
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
@@ -152,31 +217,10 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         if cell == nil {
             cell = DVMessageTableViewCell(style:.default,reuseIdentifier:initIdentifier)
         }
-        let model = self.ListArray[indexPath.row]
-        let url = URL(string:model.image)
-        cell.leftImageView.kf.setImage(with:url)
-        cell.titleLabel.text = model.title
-        let iconImage = UIImage(named:"Baby-icon")?.withRenderingMode(.alwaysOriginal)
-        cell.collectionButton.setImage(iconImage, for: .normal)
-        cell.collectionButton.setTitle(model.year, for: .normal)
-        
-        
-        print(model.title)
+        let model = self.listArray[indexPath.row]
+        cell.setModel(model)
         
         return cell
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.bannerView
-    }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return TableViewHeaderHeight
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-    {
-        let web = WebViewViewController()
-        let model = self.ListArray[indexPath.row]
-        web.url = model.alt
-        self.navigationController!.pushViewController(web, animated: true)
     }
 
     override func didReceiveMemoryWarning() {

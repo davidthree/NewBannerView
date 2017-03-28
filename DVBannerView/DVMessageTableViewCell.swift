@@ -69,6 +69,14 @@ class DVMessageTableViewCell: UITableViewCell {
             make.width.equalTo(100)
         }
     }
+    public func setModel(_ model:DVMessageModel) -> Void {
+        let url = URL(string:model.pic)
+        self.leftImageView.kf.setImage(with:url)
+        self.titleLabel.text = model.title
+        let iconImage = UIImage(named:"Baby-icon")?.withRenderingMode(.alwaysOriginal)
+        self.collectionButton.setImage(iconImage, for: .normal)
+        self.collectionButton.setTitle("10", for: .normal)
+    }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

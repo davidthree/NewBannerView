@@ -15,9 +15,14 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,NVActivityInd
 
     var url:String = ""
 
+    override func viewDidAppear(_ animated: Bool) {
+//        self.startAnimating()
+//        NVActivityIndicatorView.DEFAULT_BLOCKER_MINIMUM_DISPLAY_TIME
+//        NVActivityIndicatorView.DEFAULT_BLOCKER_DISPLAY_TIME_THRESHOLD = 5
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         let webview = WKWebView(frame: self.view.bounds)
         webview.navigationDelegate = self
@@ -27,12 +32,8 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,NVActivityInd
         self.view.addSubview(webview)
     }
     
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        self.startAnimating();
-    }
-    
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        self.stopAnimating();
+//        self.stopAnimating();
     }
 
     override func didReceiveMemoryWarning() {

@@ -11,9 +11,8 @@ import SnapKit
 import Kingfisher
 
 class DVBannerView: UIView ,UIScrollViewDelegate{
+    typealias callbackfunc = (Int) -> Void
     
-    public let MainBounds:CGRect = UIScreen.main.bounds
-
     private var ImageHeight:CGFloat = 0.0
     private let ImageWidth:CGFloat = UIScreen.main.bounds.width
     private let ShadowHeight:CGFloat = 40.0
@@ -24,30 +23,22 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
     private let TimerInterval:Int = 5
 
     internal var currentIndex : Int = 0
-    internal var photoList = [String]()
-    internal var textList = [String]()
+//    internal var photoList = [String]()
+//    internal var textList = [String]()
+    internal var bannerArray = [DVBannerModel]()
     internal var timer: Timer?
     
-    convenience init(photoArray: [String],textArray: [String], viewHeight:CGFloat)
+    var myFunc:callbackfunc?
+    
+
+    convenience init(viewHeight:CGFloat)
     {
         self.init()
-        guard photoArray.count > 0 else {
-            print("Invalid BannerArray")
-            return
-        }
-        guard textArray.count > 0 else {
-            print("Invalid BannerTextArray")
-            return
-        }
+
         self.frame = CGRect.init(x: 0, y: 0, width: MainBounds.width, height: viewHeight)
         self.backgroundColor = UIColor.clear
-        
         self.ImageHeight = viewHeight
-        self.photoList = photoArray
-        self.textList = textArray
-        self.createBannerView()
-        self.createImageList()
-        self.startTimer()
+
     }
     // MARK: -懒加载
     lazy var bannerView: UIScrollView =
@@ -65,7 +56,10 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
         {
             let view = UIView.init()
             view.backgroundColor = UIColor.black
-            view.alpha = 0.5
+            view.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(imageTap))
+            view.addGestureRecognizer(tap)
+            view.alpha = 0.3
             return view
     }()
     
@@ -81,11 +75,18 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
     lazy var pageControlView: UIPageControl =
         {
             let pageControl = UIPageControl()
+            pageControl.isUserInteractionEnabled = false
             pageControl.currentPageIndicatorTintColor = UIColor.white
             return pageControl
     }()
-    
+    public func setBanner(_ listArray:[DVBannerModel]) -> Void{
+        self.bannerArray = listArray
+        self.createBannerView()
+        self.createImageList()
+        self.startTimer()
+    }
     // MARK: -私有方法
+    
     private func startTimer()
     {
         self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(TimerInterval), target: self, selector: #selector(DVBannerView.autoSlide), userInfo: nil, repeats: true)
@@ -99,12 +100,12 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
     
     private func createBannerView()
     {
-        if self.photoList.count==1
+        if self.bannerArray.count==1
         {
-            self.bannerView.contentSize = CGSize.init(width: ImageWidth*CGFloat(self.photoList.count), height: ImageHeight)
+            self.bannerView.contentSize = CGSize.init(width: ImageWidth*CGFloat(self.bannerArray.count), height: ImageHeight)
         }else
         {
-            self.bannerView.contentSize = CGSize.init(width: ImageWidth*(CGFloat(self.photoList.count)+2), height: ImageHeight)
+            self.bannerView.contentSize = CGSize.init(width: ImageWidth*(CGFloat(self.bannerArray.count)+2), height: ImageHeight)
         }
         
         self.addSubview(self.bannerView)
@@ -115,6 +116,8 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             make.height.equalTo(ImageHeight)
         }
         
+
+        
         self.addSubview(self.shadowView)
         self.shadowView.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview().offset(0)
@@ -123,31 +126,33 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             make.height.equalTo(ShadowHeight)
         }
         
-        titleLabel.text = self.textList.first!
+        let model = self.bannerArray.first
+        titleLabel.text = model?.title
         self.addSubview(self.titleLabel)
-        self.titleLabel.textColor = UIColor.red 
+        self.titleLabel.textColor = UIColor.white
         self.titleLabel.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(shadowView).offset(WidthEdge)
             make.bottom.equalToSuperview().offset(-10)
             make.height.equalTo(TitleLabelHeight)
             make.width.lessThanOrEqualTo(MainBounds.width-120.0)
         }
-        
-        pageControlView.numberOfPages = self.photoList.count
+        pageControlView.numberOfPages = self.bannerArray.count
         self.addSubview(pageControlView)
         pageControlView.snp.makeConstraints { (make) -> Void in
             make.right.equalToSuperview().offset(-WidthEdge)
             make.bottom.equalToSuperview().offset(-HeightEdge)
             make.height.equalTo(PageControlHeight)
         }
+
     }
     private func createImageList()
     {
-        if self.photoList.count == 1
+        if self.bannerArray.count == 1
         {
             let imageView = UIImageView()
             self.bannerView.addSubview(imageView)
-            let url = URL(string:self.photoList[0])
+            let model = self.bannerArray.first
+            let url = URL(string:(model?.pic)!)
             imageView.kf.setImage(with: url)
             imageView.snp.makeConstraints({ (make)->Void in
                 make.left.equalToSuperview().offset(0)
@@ -157,9 +162,12 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             })
         }else
         {
-            for i in 0...self.photoList.count+1
+            for i in 0...self.bannerArray.count+1
             {
                 let imageView = UIImageView()
+                imageView.isUserInteractionEnabled = true
+                let ges = UITapGestureRecognizer.init(target: self, action: #selector(imageTap))
+                self.bannerView.addGestureRecognizer(ges)
                 self.bannerView.addSubview(imageView)
                 imageView.snp.makeConstraints({ (make)->Void in
                     make.left.equalToSuperview().offset(Int(ImageWidth)*i)
@@ -169,14 +177,17 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
                 })
                 switch i {
                 case 0:
-                    let url = URL(string:self.photoList.last!)
+                    let model = self.bannerArray.last
+                    let url = URL(string:(model!.pic))
                     imageView.kf.setImage(with: url)
-                case 1...self.photoList.count:
-                    let url = URL(string:self.photoList[i-1])
+                case 1...self.bannerArray.count:
+                    let model = self.bannerArray[i-1]
+                    let url = URL(string:(model.pic))
                     imageView.kf.setImage(with: url)
-                case self.photoList.count+1 :
-                    let url = URL(string:self.photoList.first!)
-                    imageView.kf.setImage(with: url)
+                case self.bannerArray.count+1 :
+                    let model = self.bannerArray.first
+                    let url = URL(string:(model?.pic)!)
+                    imageView.kf.setImage(with:url)
                 default:
                     break
                 }
@@ -184,19 +195,27 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             }
         }
     }
+    func imageTap()
+    {
+       self.myFunc!(self.currentIndex)
+    }
     //MARK: -代理方法
     func scrollViewDidScroll(_ scrollView: UIScrollView){
         
         let offset = scrollView.contentOffset.x
-        
-        if offset >= MainBounds.width*CGFloat(self.photoList.count+1){
+        let index = scrollView.contentOffset.x/MainBounds.width
+        if offset >= MainBounds.width*CGFloat(self.bannerArray.count+1){
             scrollView.setContentOffset(CGPoint.init(x: MainBounds.width, y: 0), animated: false)
+            self.currentIndex = 0
         }else if offset <= 0{
-            scrollView.setContentOffset(CGPoint.init(x: MainBounds.width*CGFloat(self.photoList.count), y: 0), animated: false)
+            scrollView.setContentOffset(CGPoint.init(x: MainBounds.width*CGFloat(self.bannerArray.count), y: 0), animated: false)
+            self.currentIndex = self.bannerArray.count-1
         }else if offset >= MainBounds.width
         {
-            self.titleLabel.text = self.textList[Int(offset/MainBounds.width)-1]
+            let model = self.bannerArray[Int(offset/MainBounds.width)-1]
+            self.titleLabel.text = model.title
             self.pageControlView.currentPage = Int(offset/MainBounds.width)-1
+            self.currentIndex = Int(index)-1
         }
     }
     

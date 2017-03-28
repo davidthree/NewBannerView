@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1A8923F8121572F8154370CF /* Pods_DVBannerView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18D07A8569C0C857493D12B /* Pods_DVBannerView.framework */; };
+		633D19E81E89FECC007748DC /* DVSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D19E71E89FECC007748DC /* DVSearchViewController.swift */; };
+		633D19EA1E8A4212007748DC /* DVNewworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D19E91E8A4212007748DC /* DVNewworkRequest.swift */; };
+		633D19EC1E8A48FC007748DC /* DVGlobalDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D19EB1E8A48FC007748DC /* DVGlobalDefine.swift */; };
+		633D1A011E8A5E74007748DC /* Baby-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 633D19FE1E8A5E74007748DC /* Baby-icon.png */; };
+		633D1A021E8A5E74007748DC /* Baby-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 633D19FF1E8A5E74007748DC /* Baby-icon@2x.png */; };
+		633D1A031E8A5E74007748DC /* Baby-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 633D1A001E8A5E74007748DC /* Baby-icon@3x.png */; };
 		6376219F1E88BEE7004772A8 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376219E1E88BEE7004772A8 /* WebViewViewController.swift */; };
 		639EBA631E8615A700FB80E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA621E8615A700FB80E2 /* AppDelegate.swift */; };
 		639EBA651E8615A700FB80E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA641E8615A700FB80E2 /* ViewController.swift */; };
@@ -18,9 +24,6 @@
 		639EBA831E8615A700FB80E2 /* DVBannerViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA821E8615A700FB80E2 /* DVBannerViewUITests.swift */; };
 		639EBA911E86172A00FB80E2 /* DVBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA901E86172A00FB80E2 /* DVBannerView.swift */; };
 		639EBA931E865ADC00FB80E2 /* DVMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA921E865ADC00FB80E2 /* DVMessageTableViewCell.swift */; };
-		639EBA961E8666B600FB80E2 /* Baby-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 639EBA941E8666B600FB80E2 /* Baby-icon@3x.png */; };
-		639EBA971E8666B600FB80E2 /* Baby-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 639EBA951E8666B600FB80E2 /* Baby-icon@2x.png */; };
-		639EBA991E866B3700FB80E2 /* Baby-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 639EBA981E866B3700FB80E2 /* Baby-icon.png */; };
 		6BFC8166C6EE6C71DF64E07A /* Pods_DVBannerViewTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E247578373B3FC7DEAC313D /* Pods_DVBannerViewTests.framework */; };
 		9ED8FE910CB8E225B2A2C49F /* Pods_DVBannerViewUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FF0DE38168302DC16A0797B /* Pods_DVBannerViewUITests.framework */; };
 /* End PBXBuildFile section */
@@ -48,6 +51,12 @@
 		1A2D16319F62958378E5AB8E /* Pods-DVBannerView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerView.release.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerView/Pods-DVBannerView.release.xcconfig"; sourceTree = "<group>"; };
 		2E247578373B3FC7DEAC313D /* Pods_DVBannerViewTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DVBannerViewTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC1DE302A7925E84968C575 /* Pods-DVBannerViewTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerViewTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerViewTests/Pods-DVBannerViewTests.release.xcconfig"; sourceTree = "<group>"; };
+		633D19E71E89FECC007748DC /* DVSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVSearchViewController.swift; sourceTree = "<group>"; };
+		633D19E91E8A4212007748DC /* DVNewworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVNewworkRequest.swift; sourceTree = "<group>"; };
+		633D19EB1E8A48FC007748DC /* DVGlobalDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGlobalDefine.swift; sourceTree = "<group>"; };
+		633D19FE1E8A5E74007748DC /* Baby-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Baby-icon.png"; path = "Assets.xcassets/AppIcon.appiconset/Baby-icon.png"; sourceTree = "<group>"; };
+		633D19FF1E8A5E74007748DC /* Baby-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Baby-icon@2x.png"; path = "Assets.xcassets/AppIcon.appiconset/Baby-icon@2x.png"; sourceTree = "<group>"; };
+		633D1A001E8A5E74007748DC /* Baby-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Baby-icon@3x.png"; path = "Assets.xcassets/AppIcon.appiconset/Baby-icon@3x.png"; sourceTree = "<group>"; };
 		6376219E1E88BEE7004772A8 /* WebViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		639EBA5F1E8615A700FB80E2 /* DVBannerView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DVBannerView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		639EBA621E8615A700FB80E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,9 +73,6 @@
 		639EBA841E8615A700FB80E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		639EBA901E86172A00FB80E2 /* DVBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVBannerView.swift; sourceTree = "<group>"; };
 		639EBA921E865ADC00FB80E2 /* DVMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageTableViewCell.swift; sourceTree = "<group>"; };
-		639EBA941E8666B600FB80E2 /* Baby-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Baby-icon@3x.png"; sourceTree = "<group>"; };
-		639EBA951E8666B600FB80E2 /* Baby-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Baby-icon@2x.png"; sourceTree = "<group>"; };
-		639EBA981E866B3700FB80E2 /* Baby-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Baby-icon.png"; sourceTree = "<group>"; };
 		73D4B64C7EA03ECFDA90E538 /* Pods-DVBannerViewUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerViewUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerViewUITests/Pods-DVBannerViewUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8B26C0F447A1C584D30F65E4 /* Pods-DVBannerViewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerViewTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerViewTests/Pods-DVBannerViewTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C4CC69533217F87C47F4B577 /* Pods-DVBannerView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerView.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerView/Pods-DVBannerView.debug.xcconfig"; sourceTree = "<group>"; };
@@ -111,6 +117,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		633D19ED1E8A49EC007748DC /* 网络 */ = {
+			isa = PBXGroup;
+			children = (
+				633D19E91E8A4212007748DC /* DVNewworkRequest.swift */,
+			);
+			name = "网络";
+			sourceTree = "<group>";
+		};
+		633D19EE1E8A49FD007748DC /* 全局 */ = {
+			isa = PBXGroup;
+			children = (
+				633D19EB1E8A48FC007748DC /* DVGlobalDefine.swift */,
+			);
+			name = "全局";
+			sourceTree = "<group>";
+		};
 		639EBA561E8615A700FB80E2 = {
 			isa = PBXGroup;
 			children = (
@@ -136,16 +158,19 @@
 		639EBA611E8615A700FB80E2 /* DVBannerView */ = {
 			isa = PBXGroup;
 			children = (
-				639EBA981E866B3700FB80E2 /* Baby-icon.png */,
-				639EBA941E8666B600FB80E2 /* Baby-icon@3x.png */,
-				639EBA951E8666B600FB80E2 /* Baby-icon@2x.png */,
-				639EBA901E86172A00FB80E2 /* DVBannerView.swift */,
+				633D19ED1E8A49EC007748DC /* 网络 */,
+				633D19EE1E8A49FD007748DC /* 全局 */,
 				639EBA621E8615A700FB80E2 /* AppDelegate.swift */,
 				639EBA641E8615A700FB80E2 /* ViewController.swift */,
-				6376219E1E88BEE7004772A8 /* WebViewViewController.swift */,
+				639EBA901E86172A00FB80E2 /* DVBannerView.swift */,
+				633D19E71E89FECC007748DC /* DVSearchViewController.swift */,
 				639EBA921E865ADC00FB80E2 /* DVMessageTableViewCell.swift */,
+				6376219E1E88BEE7004772A8 /* WebViewViewController.swift */,
 				639EBA661E8615A700FB80E2 /* Main.storyboard */,
 				639EBA691E8615A700FB80E2 /* Assets.xcassets */,
+				633D19FE1E8A5E74007748DC /* Baby-icon.png */,
+				633D19FF1E8A5E74007748DC /* Baby-icon@2x.png */,
+				633D1A001E8A5E74007748DC /* Baby-icon@3x.png */,
 				639EBA6B1E8615A700FB80E2 /* LaunchScreen.storyboard */,
 				639EBA6E1E8615A700FB80E2 /* Info.plist */,
 			);
@@ -299,12 +324,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				633D1A011E8A5E74007748DC /* Baby-icon.png in Resources */,
 				639EBA6D1E8615A700FB80E2 /* LaunchScreen.storyboard in Resources */,
 				639EBA6A1E8615A700FB80E2 /* Assets.xcassets in Resources */,
-				639EBA991E866B3700FB80E2 /* Baby-icon.png in Resources */,
-				639EBA961E8666B600FB80E2 /* Baby-icon@3x.png in Resources */,
 				639EBA681E8615A700FB80E2 /* Main.storyboard in Resources */,
-				639EBA971E8666B600FB80E2 /* Baby-icon@2x.png in Resources */,
+				633D1A031E8A5E74007748DC /* Baby-icon@3x.png in Resources */,
+				633D1A021E8A5E74007748DC /* Baby-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,7 +494,10 @@
 			files = (
 				6376219F1E88BEE7004772A8 /* WebViewViewController.swift in Sources */,
 				639EBA911E86172A00FB80E2 /* DVBannerView.swift in Sources */,
+				633D19EA1E8A4212007748DC /* DVNewworkRequest.swift in Sources */,
+				633D19E81E89FECC007748DC /* DVSearchViewController.swift in Sources */,
 				639EBA931E865ADC00FB80E2 /* DVMessageTableViewCell.swift in Sources */,
+				633D19EC1E8A48FC007748DC /* DVGlobalDefine.swift in Sources */,
 				639EBA651E8615A700FB80E2 /* ViewController.swift in Sources */,
 				639EBA631E8615A700FB80E2 /* AppDelegate.swift in Sources */,
 			);
