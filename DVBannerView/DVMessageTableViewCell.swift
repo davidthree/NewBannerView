@@ -75,7 +75,7 @@ class DVMessageTableViewCell: UITableViewCell {
         self.titleLabel.text = model.title
         let iconImage = UIImage(named:"Baby-icon")?.withRenderingMode(.alwaysOriginal)
         self.collectionButton.setImage(iconImage, for: .normal)
-        self.collectionButton.setTitle("10", for: .normal)
+        self.collectionButton.setTitle("\(model.praise)", for: .normal)
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

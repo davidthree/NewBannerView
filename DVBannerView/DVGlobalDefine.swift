@@ -16,6 +16,7 @@ public let MSG_pathParise:(NSString) = "praise.php"
 public let MSG_pathSearch:(NSString) = "newsSearch"
 public let MSG_pathSlide:(NSString) = "slide.php"
 
+
 class DVGlobalDefine: NSObject {
 
 }

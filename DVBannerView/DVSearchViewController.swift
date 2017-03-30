@@ -45,10 +45,6 @@ class DVSearchViewController: UIViewController,UITableViewDataSource,UITableView
         }
         let model = self.ListArray[indexPath.row]
         cell.setModel(model)
-        
-        
-        print(model.title)
-        
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -57,8 +53,9 @@ class DVSearchViewController: UIViewController,UITableViewDataSource,UITableView
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0.01
     }
-
-
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.01
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

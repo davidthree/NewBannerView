@@ -8,17 +8,13 @@
 
 import UIKit
 import WebKit
-import NVActivityIndicatorView
 
-class WebViewViewController: UIViewController,WKNavigationDelegate,NVActivityIndicatorViewable
+class WebViewViewController: UIViewController,WKNavigationDelegate
 {
 
     var url:String = ""
 
     override func viewDidAppear(_ animated: Bool) {
-//        self.startAnimating()
-//        NVActivityIndicatorView.DEFAULT_BLOCKER_MINIMUM_DISPLAY_TIME
-//        NVActivityIndicatorView.DEFAULT_BLOCKER_DISPLAY_TIME_THRESHOLD = 5
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +29,6 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,NVActivityInd
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-//        self.stopAnimating();
     }
 
     override func didReceiveMemoryWarning() {

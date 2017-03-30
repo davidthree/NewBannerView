@@ -9,40 +9,33 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RealmSwift
 
 class DVBannerView: UIView ,UIScrollViewDelegate{
     typealias callbackfunc = (Int) -> Void
-    
-    private var ImageHeight:CGFloat = 0.0
-    private let ImageWidth:CGFloat = UIScreen.main.bounds.width
-    private let ShadowHeight:CGFloat = 40.0
-    private let PageControlHeight:CGFloat = 20.0
-    private let TitleLabelHeight:CGFloat = 20.0
-    private let WidthEdge:CFloat = 10.0
-    private let HeightEdge:CFloat = 5.0
-    private let TimerInterval:Int = 5
-
-    internal var currentIndex : Int = 0
-//    internal var photoList = [String]()
-//    internal var textList = [String]()
-    internal var bannerArray = [DVBannerModel]()
-    internal var timer: Timer?
-    
     var myFunc:callbackfunc?
+    private var ImageHeight: CGFloat = 0.0
+    private let ImageWidth: CGFloat = UIScreen.main.bounds.width
+    private let ShadowHeight: CGFloat = 40.0
+    private let PageControlHeight: CGFloat = 20.0
+    private let TitleLabelHeight: CGFloat = 20.0
+    private let WidthEdge: CFloat = 10.0
+    private let HeightEdge: CFloat = 5.0
+    private var currentIndex: Int = 0
+    private var bannerArray: Results<DVBannerModel>?
+    private var timer: DispatchSourceTimer?
     
-
     convenience init(viewHeight:CGFloat)
     {
         self.init()
-
+        
         self.frame = CGRect.init(x: 0, y: 0, width: MainBounds.width, height: viewHeight)
         self.backgroundColor = UIColor.clear
         self.ImageHeight = viewHeight
-
+        
     }
     // MARK: -懒加载
-    lazy var bannerView: UIScrollView =
-        {
+    lazy var bannerView: UIScrollView = {
             let scrollView = UIScrollView()
             scrollView.isPagingEnabled = true
             scrollView.delegate = self
@@ -52,8 +45,7 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             return scrollView
     }()
     
-    lazy var shadowView: UIView =
-        {
+    lazy var shadowView: UIView = {
             let view = UIView.init()
             view.backgroundColor = UIColor.black
             view.isUserInteractionEnabled = true
@@ -63,49 +55,50 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             return view
     }()
     
-    lazy var titleLabel: UILabel =
-        {
+    lazy var titleLabel: UILabel = {
             let label = UILabel.init()
             label.textColor = UIColor.white
             label.font = UIFont.systemFont(ofSize: 15)
-
+            
             return label
     }()
     
-    lazy var pageControlView: UIPageControl =
-        {
+    lazy var pageControlView: UIPageControl = {
             let pageControl = UIPageControl()
             pageControl.isUserInteractionEnabled = false
             pageControl.currentPageIndicatorTintColor = UIColor.white
             return pageControl
     }()
-    public func setBanner(_ listArray:[DVBannerModel]) -> Void{
+    // MARK: -外部方法
+    public func setBanner(_ listArray:Results<DVBannerModel>) -> Void{
         self.bannerArray = listArray
         self.createBannerView()
         self.createImageList()
         self.startTimer()
     }
     // MARK: -私有方法
-    
-    private func startTimer()
-    {
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(TimerInterval), target: self, selector: #selector(DVBannerView.autoSlide), userInfo: nil, repeats: true)
+    private func startTimer() {
+        timer = DispatchSource.makeTimerSource(queue: .main)
+        timer?.scheduleRepeating(deadline: .now() + 5, interval: 5)
+        timer?.setEventHandler {
+            self.autoSlide()
+        }
+        // 启动定时器
+        timer?.resume()
     }
     
     
-    @objc private func autoSlide()
-    {
+    private func autoSlide() {
         self.bannerView.setContentOffset(CGPoint.init(x: self.bannerView.contentOffset.x+MainBounds.width, y: 0), animated: true)
     }
     
-    private func createBannerView()
-    {
-        if self.bannerArray.count==1
-        {
-            self.bannerView.contentSize = CGSize.init(width: ImageWidth*CGFloat(self.bannerArray.count), height: ImageHeight)
-        }else
-        {
-            self.bannerView.contentSize = CGSize.init(width: ImageWidth*(CGFloat(self.bannerArray.count)+2), height: ImageHeight)
+    private func createBannerView() {
+        if self.bannerArray?.count==1{
+            self.bannerView.contentSize = CGSize.init(width: ImageWidth*1, height: ImageHeight)
+        }else if (self.bannerArray?.count)!>1{
+            self.bannerView.contentSize = CGSize.init(width: ImageWidth*(CGFloat(self.bannerArray!.count)+2), height: ImageHeight)
+        }else{
+            //without banner
         }
         
         self.addSubview(self.bannerView)
@@ -115,9 +108,6 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             make.right.equalToSuperview().offset(0)
             make.height.equalTo(ImageHeight)
         }
-        
-
-        
         self.addSubview(self.shadowView)
         self.shadowView.snp.makeConstraints { (make) -> Void in
             make.left.equalToSuperview().offset(0)
@@ -126,7 +116,7 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             make.height.equalTo(ShadowHeight)
         }
         
-        let model = self.bannerArray.first
+        let model = self.bannerArray?.first
         titleLabel.text = model?.title
         self.addSubview(self.titleLabel)
         self.titleLabel.textColor = UIColor.white
@@ -136,22 +126,20 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             make.height.equalTo(TitleLabelHeight)
             make.width.lessThanOrEqualTo(MainBounds.width-120.0)
         }
-        pageControlView.numberOfPages = self.bannerArray.count
+        pageControlView.numberOfPages = (self.bannerArray?.count)!
         self.addSubview(pageControlView)
         pageControlView.snp.makeConstraints { (make) -> Void in
             make.right.equalToSuperview().offset(-WidthEdge)
             make.bottom.equalToSuperview().offset(-HeightEdge)
             make.height.equalTo(PageControlHeight)
         }
-
+        
     }
-    private func createImageList()
-    {
-        if self.bannerArray.count == 1
-        {
+    private func createImageList() {
+        if self.bannerArray?.count == 1 {
             let imageView = UIImageView()
             self.bannerView.addSubview(imageView)
-            let model = self.bannerArray.first
+            let model = self.bannerArray?.first
             let url = URL(string:(model?.pic)!)
             imageView.kf.setImage(with: url)
             imageView.snp.makeConstraints({ (make)->Void in
@@ -160,10 +148,8 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
                 make.width.equalTo(ImageWidth)
                 make.height.equalTo(ImageHeight)
             })
-        }else
-        {
-            for i in 0...self.bannerArray.count+1
-            {
+        }else {
+            for i in 0...(self.bannerArray?.count)!+1 {
                 let imageView = UIImageView()
                 imageView.isUserInteractionEnabled = true
                 let ges = UITapGestureRecognizer.init(target: self, action: #selector(imageTap))
@@ -177,15 +163,15 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
                 })
                 switch i {
                 case 0:
-                    let model = self.bannerArray.last
+                    let model = self.bannerArray?.last
                     let url = URL(string:(model!.pic))
                     imageView.kf.setImage(with: url)
-                case 1...self.bannerArray.count:
-                    let model = self.bannerArray[i-1]
-                    let url = URL(string:(model.pic))
+                case 1...(self.bannerArray?.count)!:
+                    let model = self.bannerArray?[i-1]
+                    let url = URL(string:(model?.pic)!)
                     imageView.kf.setImage(with: url)
-                case self.bannerArray.count+1 :
-                    let model = self.bannerArray.first
+                case (self.bannerArray?.count)!+1 :
+                    let model = self.bannerArray?.first
                     let url = URL(string:(model?.pic)!)
                     imageView.kf.setImage(with:url)
                 default:
@@ -195,36 +181,34 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             }
         }
     }
-    func imageTap()
-    {
-       self.myFunc!(self.currentIndex)
+    func imageTap() {
+        self.myFunc!(self.currentIndex)
     }
     //MARK: -代理方法
     func scrollViewDidScroll(_ scrollView: UIScrollView){
         
         let offset = scrollView.contentOffset.x
         let index = scrollView.contentOffset.x/MainBounds.width
-        if offset >= MainBounds.width*CGFloat(self.bannerArray.count+1){
+        if offset >= MainBounds.width*CGFloat((self.bannerArray?.count)!+1){
             scrollView.setContentOffset(CGPoint.init(x: MainBounds.width, y: 0), animated: false)
             self.currentIndex = 0
         }else if offset <= 0{
-            scrollView.setContentOffset(CGPoint.init(x: MainBounds.width*CGFloat(self.bannerArray.count), y: 0), animated: false)
-            self.currentIndex = self.bannerArray.count-1
-        }else if offset >= MainBounds.width
-        {
-            let model = self.bannerArray[Int(offset/MainBounds.width)-1]
-            self.titleLabel.text = model.title
+            scrollView.setContentOffset(CGPoint.init(x: MainBounds.width*CGFloat((self.bannerArray?.count)!), y: 0), animated: false)
+            self.currentIndex = (self.bannerArray?.count)!-1
+        }else if offset >= MainBounds.width {
+            let model = self.bannerArray?[Int(offset/MainBounds.width)-1]
+            self.titleLabel.text = model?.title
             self.pageControlView.currentPage = Int(offset/MainBounds.width)-1
             self.currentIndex = Int(index)-1
         }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.timer?.invalidate()
+        timer?.cancel()
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
                                   willDecelerate decelerate: Bool){
-         self.startTimer()
+        self.startTimer()
     }
     
 }
