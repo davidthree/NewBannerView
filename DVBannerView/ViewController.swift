@@ -12,15 +12,14 @@ import RealmSwift
 import PageMenu
 
 
-
 class ViewController: UIViewController,UISearchBarDelegate {
     
-   
     @IBOutlet weak var searchButton: UIBarButtonItem!
-    private var searchBar = UISearchBar()
-    private var pageMenu: CAPSPageMenu?
-    private var controllerArray : [UIViewController] = []
-    private var controllerTitleArray = ["首页","国际足球","中国足球","赛前","转会状态","7M制造","彩票"]
+    var searchBar = UISearchBar()
+    var pageMenu: CAPSPageMenu?
+    var controllerArray : [UIViewController] = []
+    var controllerTitleArray = ["首页","国际足球","中国足球","赛前","转会状态","7M制造","彩票"]
+    var controllerTitleIDArray = [0,1,2,5,3,6,4]
     
     lazy var searchBackgroundView : UIView = {
         let view = UIView.init()
@@ -54,7 +53,7 @@ class ViewController: UIViewController,UISearchBarDelegate {
         self.searchBar.delegate = self
         self.searchBar.setShowsCancelButton(true, animated: true)
         self.searchBar.backgroundColor = UIColor.white
-        self.searchBar.backgroundImage = self.imageWithColor(color: UIColor.init(colorLiteralRed: 245/255.0, green: 245/255.0, blue: 245/255.0, alpha: 1), size: self.searchBar.bounds.size)
+        self.searchBar.backgroundImage = ViewController.imageWithColor(color: UIColor.init(colorLiteralRed: 245/255.0, green: 245/255.0, blue: 245/255.0, alpha: 1), size: self.searchBar.bounds.size)
         
         self.view.addSubview(self.searchBackgroundView)
         self.searchBackgroundView.snp.makeConstraints { (make) -> Void in
@@ -64,22 +63,20 @@ class ViewController: UIViewController,UISearchBarDelegate {
             make.bottom.equalToSuperview().offset(0)
         }
     }
-    func imageWithColor(color:UIColor,size:CGSize) -> UIImage {
-        let rect = CGRect.init(x: 0, y: 0, width: size.width, height: size.height)
-        UIGraphicsBeginImageContext(rect.size);
-        let context = UIGraphicsGetCurrentContext()
-        context!.setFillColor(color.cgColor)
-        context!.fill(rect);
-        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext();
-        return image;
-    }
+    
     
     func setupControllerArray(){
         
         for i in 0...controllerTitleArray.count-1 {
-            let controller : UIViewController = DVMessageViewController()
+            let controller : DVMessageViewController = DVMessageViewController()
             controller.title = controllerTitleArray[i]
+            controller.newMenuListItem = controllerTitleIDArray[i]
+            weak var weakself = self
+            controller.myFunc = {(url) -> Void in
+                let web = WebViewViewController()
+                web.url = url
+                weakself?.navigationController?.pushViewController(web, animated: true)
+            }
             controllerArray.append(controller)
             
         }
@@ -95,19 +92,18 @@ class ViewController: UIViewController,UISearchBarDelegate {
         ]
         
         pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: CGRect.init(x: 0, y: 64, width: self.view.frame.size.width, height: self.view.frame.size.height-64.0), pageMenuOptions: parameters)
-        
         self.view.addSubview(pageMenu!.view)
+    }
+    @IBAction func searchAction(_ sender: Any) {
+        self.searchBackgroundView.isHidden = false
+        self.searchBar.becomeFirstResponder()
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     func searchFinished(){
         self.searchBar.text = ""
         self.searchBar.resignFirstResponder()
         self.searchBackgroundView.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-    @IBAction func searchAction(_ sender: Any) {
-        self.searchBackgroundView.isHidden = false
-        self.searchBar.becomeFirstResponder()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     //MARK:代理方法
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

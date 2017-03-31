@@ -9,11 +9,11 @@
 import UIKit
 
 class DVMessageTableViewCell: UITableViewCell {
+
     
     let ImageViewHeight:CGFloat = 100.0
     let LabelHeight:CGFloat = 40.0
     let ButtonHeight:CGFloat = 16.0
-    
     var leftImageView = UIImageView()
     var titleLabel = UILabel()
     var collectionButton = UIButton()

@@ -148,7 +148,8 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
                 make.width.equalTo(ImageWidth)
                 make.height.equalTo(ImageHeight)
             })
-        }else {
+        }else if ((self.bannerArray?.count) != 0)
+        {
             for i in 0...(self.bannerArray?.count)!+1 {
                 let imageView = UIImageView()
                 imageView.isUserInteractionEnabled = true
