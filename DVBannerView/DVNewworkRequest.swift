@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-
+import SwiftyJSON
 private let DVNewworkRequestShareInstance = DVNewworkRequest()
 
 class DVNewworkRequest: NSObject {
@@ -20,12 +20,12 @@ extension DVNewworkRequest {
     //MARK: - GET 请求
     //let tools : DVNewworkRequest.shareInstance!
     
-    func getRequest(urlString: String, params : [String : Any], success : @escaping (_ response : [String : AnyObject])->(), failture : @escaping (_ error : Error)->()){
+    func getRequest(urlString: String, params : [String : Any], success : @escaping (_ response : JSON)->(), failture : @escaping (_ error : Error)->()){
         Alamofire.request((Main_MsgURL as String)+urlString, method: .get, parameters: params)
             .responseJSON { (response) in
                 switch response.result {
                 case .success(let value):
-                    success(value as! [String : AnyObject])
+                    success(JSON(value))
                 case .failure(let error):
                     failture(error)
                 }

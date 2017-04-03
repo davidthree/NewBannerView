@@ -73,6 +73,7 @@ class DVMessageTableViewCell: UITableViewCell {
         let url = URL(string:model.pic)
         self.leftImageView.kf.setImage(with:url)
         self.titleLabel.text = model.title
+//        print(model.title   )
         let iconImage = UIImage(named:"Baby-icon")?.withRenderingMode(.alwaysOriginal)
         self.collectionButton.setImage(iconImage, for: .normal)
         self.collectionButton.setTitle("\(model.praise)", for: .normal)

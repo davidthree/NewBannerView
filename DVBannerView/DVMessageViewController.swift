@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import RealmSwift
+import SwiftyJSON
 class DVFirstMessageModel: Object {
     dynamic var id = 0
     dynamic var sortid = ""
@@ -72,11 +73,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     typealias callbackFunc = (String) -> Void
     var myFunc: callbackFunc?
     var newMenuListItem: Int = 0
-    var bannerIDArray: [String] = [""]
-    var praiseDic: Dictionary<String,AnyObject> = [:]
-    var messageFirstPageItem: Results<DVFirstMessageModel>?
-    var messageItem: Results<DVMessageModel>?
-    var bannerItem: Results<DVBannerModel>?
+    var messageListArray = [Any]()
+    var bannerListArray = [Any]()
     //MARK:懒加载
     lazy var mainTableView: UITableView = {
         let tableView = UITableView.init(frame: CGRect.zero, style: UITableViewStyle.grouped)
@@ -89,7 +87,7 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     lazy var bannerView: DVBannerView = {
         let view = DVBannerView.init(viewHeight:TableViewHeaderHeight)
         view.myFunc = {(index) -> Void in
-            let model = self.bannerItem![index]
+            let model = self.bannerListArray[index] as! DVBannerModel
             self.myFunc!(model.url)
         }
         return view
@@ -117,18 +115,54 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     
     func setupDataBase(){
+//        print(realm.configuration.fileURL?.absoluteString)
+        var messageFirstItem:Results<DVFirstMessageModel>?
+        var messageOtherItem:Results<DVMessageModel>?
+        
         if newMenuListItem == 0{
-            self.messageFirstPageItem = realm.objects(DVFirstMessageModel.self)
+            messageFirstItem = realm.objects(DVFirstMessageModel.self)
         }else{
-            self.messageItem = realm.objects(DVMessageModel.self).filter("sortid = '\(self.newMenuListItem)'")
+            messageOtherItem = realm.objects(DVMessageModel.self).filter("sortid = '\(self.newMenuListItem)'")
         }
-
-        self.bannerItem = realm.objects(DVBannerModel.self)
-        self.bannerView.setBanner(self.bannerItem!)
+        //列表
+        if newMenuListItem == 0 {
+            if (messageFirstItem?.count)! >= 10 {
+                for i in 0...9 {
+                    let model = messageFirstItem![i]
+                    self.messageListArray.append(model)
+                }
+            }else{
+                if messageFirstItem?.count != 0 {
+                    for model in messageFirstItem! {
+                        self.messageListArray.append(model)
+                    }
+                }
+            }
+        }else{
+            if (messageOtherItem?.count)! >= 10{
+                for i in 0...9 {
+                    let model = messageOtherItem![i]
+                    self.messageListArray.append(model)
+                }
+            }else{
+                if messageOtherItem?.count != 0 {
+                    for model in messageOtherItem! {
+                        self.messageListArray.append(model)
+                    }
+                }
+            }
+        }
+        
+        let banneritem = realm.objects(DVBannerModel.self)
+        if banneritem.count != 0 {
+            for i in banneritem {
+                self.bannerListArray.append(i)
+            }
+            self.bannerView.setBanner(self.bannerListArray)
+        }
     }
     
     func setupData(){
-        
         let request = DVNewworkRequest()
         var params = [String:String]()
         if newMenuListItem == 0 {
@@ -137,63 +171,112 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
         {
             params["sort"] = "\(newMenuListItem)"
         }
-        request.getRequest(urlString: MSG_pathList as String, params:params, success: { (response) in
-            let model = DVMessageModel()
-            self.praiseDic = response["praise"] as! Dictionary<String, AnyObject>
-            let dataArray = response["data"] as! [Dictionary<String,AnyObject>]
-            for dataDic in dataArray{
-                model.id = Int(dataDic ["id"] as! NSNumber)
-                model.sortid = dataDic["sortid"] as! String
-                model.title = dataDic["title"] as! String
-                model.titlesub = dataDic["titlesub"] as! String
-                model.type = Int(dataDic["type"] as! NSNumber)
-                model.source = dataDic["source"] as! String
-                model.date = dataDic["date"] as! String
-                model.datefolder = dataDic["datefolder"] as! String
-                model.url = dataDic["url"] as! String
-                model.pic = dataDic["pic"] as! String
-                model.piclarge = dataDic["piclarge"] as! String
-                model.picmore = dataDic["picmore"] as! String
-                model.iscommend = Int(dataDic["iscommend"] as! NSNumber)
-                model.istop = Int(dataDic["istop"] as! NSNumber)
-                model.summary = dataDic["summary"] as! String
-                model.praise = Int(self.praiseDic["\(model.id)"] as! NSNumber)
-                
-                try! realm.write {
-                    if self.newMenuListItem == 0{
-                        realm.create(DVFirstMessageModel.self, value: model, update: true)
-                    }else{
-                        realm.create(DVMessageModel.self, value: model, update: true)
+        request.getRequest(urlString: MSG_pathList as String, params:params, success: { (json) in
+            self.messageListArray.removeAll()
+            if let dataArray = json["data"].array{
+                if dataArray.count != 0{
+                    let praiseDic = json["praise"]
+                    for dataDic in dataArray{
+                        let model = DVMessageModel()
+                        if let id = dataDic["id"].int{
+                            model.id = id
+                        }
+                        if let sortid = dataDic["sortid"].string{
+                            model.sortid = sortid
+                        }
+                        if let title = dataDic["title"].string{
+                            model.title = title
+                        }
+                        if let titlesub = dataDic["titlesub"].string{
+                            model.titlesub = titlesub
+                        }
+                        if let type = dataDic["type"].int{
+                            model.type = type
+                        }
+                        if let datefolder = dataDic["datefolder"].string{
+                            model.datefolder = datefolder
+                        }
+                        if let url = dataDic["url"].string{
+                            model.url = url
+                        }
+                        if let pic = dataDic["pic"].string{
+                            model.pic = pic
+                        }
+                        if let piclarge = dataDic["piclarge"].string{
+                            model.piclarge = piclarge
+                        }
+                        if let picmore = dataDic["picmore"].string{
+                            model.picmore = picmore
+                        }
+                        if let iscommend = dataDic["iscommend"].int{
+                            model.iscommend = iscommend
+                        }
+                        if let istop = dataDic["istop"].int{
+                            model.istop = istop
+                        }
+                        if let summary = dataDic["summary"].string{
+                            model.summary = summary
+                        }
+                        if let praise = praiseDic["\(model.id)"].int {
+                            model.praise = praise
+                        }
+                        self.messageListArray.append(model)
+                        try! realm.write {
+                            if self.newMenuListItem == 0{
+                                realm.create(DVFirstMessageModel.self, value: model, update: true)
+                            }else{
+                                realm.create(DVMessageModel.self, value: model, update: true)
+                            }
+                        }
                     }
-                    
                 }
             }
+            
             self.mainTableView.reloadData()
         }) { (error) in
             
         }
-        request.getRequestReturnArray(urlString: MSG_pathSlide as String, params: [:], success: { (response) in
+        request.getRequest(urlString: MSG_pathSlide, params: [:], success: { (json) in
+            
+            let banneritem = realm.objects(DVBannerModel.self)
             try! realm.write{
-                realm.delete(self.bannerItem!)
+                realm.delete(banneritem)
             }
-            for dataDic in response{
-                let model = DVBannerModel()
-                if let newsid = dataDic["newsid"] as? String {
-                    model.newsid = newsid
-                }
-                model.datefolder = dataDic["datefolder"] as! String
-                model.praise = Int(dataDic["praise"] as! NSNumber)
-                model.title = dataDic["title"] as! String
-                model.newstitle = dataDic["newstitle"] as! String
-                model.url = dataDic["url"] as! String
-                model.pic = dataDic["pic"] as! String
-                model.summary = dataDic["summary"] as! String
-                self.bannerIDArray.append(model.newsid)
-                try! realm.write{
-                    realm.create(DVBannerModel.self, value: model, update: true)
+            if let jsonArray = json.array{
+                self.bannerListArray.removeAll()
+                for dataDic in jsonArray{
+                    let model = DVBannerModel()
+                    if let newsid = dataDic["newsid"].string {
+                        model.newsid = newsid
+                    }
+                    if let datefolder = dataDic["datefolder"].string {
+                        model.datefolder = datefolder
+                    }
+                    if let praise = dataDic["praise"].int {
+                        model.praise = praise
+                    }
+                    if let title = dataDic["title"].string {
+                        model.title = title
+                    }
+                    if let newstitle = dataDic["newstitle"].string {
+                        model.newstitle = newstitle
+                    }
+                    if let url = dataDic["url"].string {
+                        model.url = url
+                    }
+                    if let pic = dataDic["pic"].string {
+                        model.pic = pic
+                    }
+                    if let summary = dataDic["summary"].string {
+                        model.summary = summary
+                    }
+                    self.bannerListArray.append(model)
+                    try! realm.write{
+                        realm.create(DVBannerModel.self, value: model, update: true)
+                    }
                 }
             }
-            self.bannerView.setBanner(self.bannerItem!)
+            self.bannerView.setBanner(self.bannerListArray)
         }) { (error) in
             
         }
@@ -224,20 +307,14 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if newMenuListItem == 0 {
-            return messageFirstPageItem?.count ?? 0
-        }else{
-            return self.messageItem?.count ?? 0
-        }
+        return messageListArray.count
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var model = DVMessageModel()
-        if newMenuListItem == 0 {
-            model = DVMessageModel(value: self.messageFirstPageItem![indexPath.row])
-        }else{
-            model = self.messageItem![indexPath.row]
+        let model = self.messageListArray[indexPath.row] as! DVMessageModel
+        if (self.myFunc != nil){
+            self.myFunc!(model.url)
         }
-        self.myFunc!(model.url)
+        
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell  {
         let initIdentifier = "reuseID"
@@ -245,16 +322,13 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
         if cell == nil {
             cell = DVMessageTableViewCell(style:.default,reuseIdentifier:initIdentifier)
         }
-        if newMenuListItem == 0 {
-            let model = self.messageFirstPageItem![indexPath.row]
-            cell.setModel(DVMessageModel(value:model))
-        }else{
-            let model = self.messageItem![indexPath.row]
-            cell.setModel(model)
-        }
-        
-        return cell
+        let model = self.messageListArray[indexPath.row]
+        cell.setModel(DVMessageModel(value:model))
+            return cell
     }
+    
+        
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
