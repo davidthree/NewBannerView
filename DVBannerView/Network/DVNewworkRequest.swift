@@ -19,24 +19,12 @@ class DVNewworkRequest: NSObject {
 extension DVNewworkRequest {
     //MARK: - GET 请求
     //let tools : DVNewworkRequest.shareInstance!
-    
     func getRequest(urlString: String, params : [String : Any], success : @escaping (_ response : JSON)->(), failture : @escaping (_ error : Error)->()){
-        Alamofire.request((Main_MsgURL as String)+urlString, method: .get, parameters: params)
+        Alamofire.request(Main_MsgURL+urlString, method: .get, parameters: params)
             .responseJSON { (response) in
                 switch response.result {
                 case .success(let value):
                     success(JSON(value))
-                case .failure(let error):
-                    failture(error)
-                }
-        }
-    }//MARK: - return - 数组
-    func getRequestReturnArray(urlString: String, params : [String : Any], success : @escaping (_ response : [Dictionary<String, AnyObject>])->(), failture : @escaping (_ error : Error)->()){
-        Alamofire.request((Main_MsgURL as String)+urlString, method: .get, parameters: params)
-            .responseJSON { (response) in
-                switch response.result {
-                case .success(let value):
-                    success(value as! [Dictionary<String, AnyObject>])
                 case .failure(let error):
                     failture(error)
                 }

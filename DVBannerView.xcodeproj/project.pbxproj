@@ -8,24 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		1A8923F8121572F8154370CF /* Pods_DVBannerView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18D07A8569C0C857493D12B /* Pods_DVBannerView.framework */; };
-		633D19E81E89FECC007748DC /* DVSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D19E71E89FECC007748DC /* DVSearchViewController.swift */; };
-		633D19EA1E8A4212007748DC /* DVNewworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D19E91E8A4212007748DC /* DVNewworkRequest.swift */; };
-		633D19EC1E8A48FC007748DC /* DVGlobalDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D19EB1E8A48FC007748DC /* DVGlobalDefine.swift */; };
-		633D1A011E8A5E74007748DC /* Baby-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 633D19FE1E8A5E74007748DC /* Baby-icon.png */; };
-		633D1A021E8A5E74007748DC /* Baby-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 633D19FF1E8A5E74007748DC /* Baby-icon@2x.png */; };
-		633D1A031E8A5E74007748DC /* Baby-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 633D1A001E8A5E74007748DC /* Baby-icon@3x.png */; };
-		6361CBAE1E8CFAE300B8E121 /* DVMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361CBAD1E8CFAE300B8E121 /* DVMessageViewController.swift */; };
-		636B5F601E8E5BFD000564AD /* UIViewController+Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636B5F5F1E8E5BFD000564AD /* UIViewController+Category.swift */; };
-		6376219F1E88BEE7004772A8 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376219E1E88BEE7004772A8 /* WebViewViewController.swift */; };
-		639EBA631E8615A700FB80E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA621E8615A700FB80E2 /* AppDelegate.swift */; };
-		639EBA651E8615A700FB80E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA641E8615A700FB80E2 /* ViewController.swift */; };
+		632AF4BE1E94871900D1E325 /* UIViewController+Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4AA1E94871900D1E325 /* UIViewController+Category.swift */; };
+		632AF4BF1E94871900D1E325 /* Baby-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 632AF4AC1E94871900D1E325 /* Baby-icon.png */; };
+		632AF4C01E94871900D1E325 /* Baby-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632AF4AD1E94871900D1E325 /* Baby-icon@2x.png */; };
+		632AF4C11E94871900D1E325 /* Baby-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632AF4AE1E94871900D1E325 /* Baby-icon@3x.png */; };
+		632AF4C21E94871900D1E325 /* DVNewworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4B01E94871900D1E325 /* DVNewworkRequest.swift */; };
+		632AF4C31E94871900D1E325 /* DVGlobalDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4B21E94871900D1E325 /* DVGlobalDefine.swift */; };
+		632AF4C41E94871900D1E325 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4B41E94871900D1E325 /* AppDelegate.swift */; };
+		632AF4C51E94871900D1E325 /* DVBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4B71E94871900D1E325 /* DVBannerView.swift */; };
+		632AF4C61E94871900D1E325 /* DVMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4B81E94871900D1E325 /* DVMessageTableViewCell.swift */; };
+		632AF4C71E94871900D1E325 /* DVMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BA1E94871900D1E325 /* DVMessageViewController.swift */; };
+		632AF4C81E94871900D1E325 /* DVSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BB1E94871900D1E325 /* DVSearchViewController.swift */; };
+		632AF4C91E94871900D1E325 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BC1E94871900D1E325 /* ViewController.swift */; };
+		632AF4CA1E94871900D1E325 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BD1E94871900D1E325 /* WebViewViewController.swift */; };
+		632AF4CC1E94878300D1E325 /* DVFirstMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4CB1E94878300D1E325 /* DVFirstMessageModel.swift */; };
+		632AF4CE1E9487EE00D1E325 /* DVMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4CD1E9487EE00D1E325 /* DVMessageModel.swift */; };
+		632AF4D21E94881300D1E325 /* DVBannerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4D11E94881300D1E325 /* DVBannerModel.swift */; };
+		637E5C7B1E9723F200F68689 /* zan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C771E9723F200F68689 /* zan@2x.png */; };
+		637E5C7C1E9723F200F68689 /* zan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C781E9723F200F68689 /* zan@3x.png */; };
+		637E5C7D1E9723F200F68689 /* zaned@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C791E9723F200F68689 /* zaned@2x.png */; };
+		637E5C7E1E9723F200F68689 /* zaned@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C7A1E9723F200F68689 /* zaned@3x.png */; };
 		639EBA681E8615A700FB80E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 639EBA661E8615A700FB80E2 /* Main.storyboard */; };
 		639EBA6A1E8615A700FB80E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 639EBA691E8615A700FB80E2 /* Assets.xcassets */; };
 		639EBA6D1E8615A700FB80E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 639EBA6B1E8615A700FB80E2 /* LaunchScreen.storyboard */; };
 		639EBA781E8615A700FB80E2 /* DVBannerViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA771E8615A700FB80E2 /* DVBannerViewTests.swift */; };
 		639EBA831E8615A700FB80E2 /* DVBannerViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA821E8615A700FB80E2 /* DVBannerViewUITests.swift */; };
-		639EBA911E86172A00FB80E2 /* DVBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA901E86172A00FB80E2 /* DVBannerView.swift */; };
-		639EBA931E865ADC00FB80E2 /* DVMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EBA921E865ADC00FB80E2 /* DVMessageTableViewCell.swift */; };
 		6BFC8166C6EE6C71DF64E07A /* Pods_DVBannerViewTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E247578373B3FC7DEAC313D /* Pods_DVBannerViewTests.framework */; };
 		9ED8FE910CB8E225B2A2C49F /* Pods_DVBannerViewUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FF0DE38168302DC16A0797B /* Pods_DVBannerViewUITests.framework */; };
 /* End PBXBuildFile section */
@@ -53,18 +60,27 @@
 		1A2D16319F62958378E5AB8E /* Pods-DVBannerView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerView.release.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerView/Pods-DVBannerView.release.xcconfig"; sourceTree = "<group>"; };
 		2E247578373B3FC7DEAC313D /* Pods_DVBannerViewTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DVBannerViewTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC1DE302A7925E84968C575 /* Pods-DVBannerViewTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerViewTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerViewTests/Pods-DVBannerViewTests.release.xcconfig"; sourceTree = "<group>"; };
-		633D19E71E89FECC007748DC /* DVSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVSearchViewController.swift; sourceTree = "<group>"; };
-		633D19E91E8A4212007748DC /* DVNewworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVNewworkRequest.swift; sourceTree = "<group>"; };
-		633D19EB1E8A48FC007748DC /* DVGlobalDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGlobalDefine.swift; sourceTree = "<group>"; };
-		633D19FE1E8A5E74007748DC /* Baby-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Baby-icon.png"; path = "Assets.xcassets/AppIcon.appiconset/Baby-icon.png"; sourceTree = "<group>"; };
-		633D19FF1E8A5E74007748DC /* Baby-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Baby-icon@2x.png"; path = "Assets.xcassets/AppIcon.appiconset/Baby-icon@2x.png"; sourceTree = "<group>"; };
-		633D1A001E8A5E74007748DC /* Baby-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Baby-icon@3x.png"; path = "Assets.xcassets/AppIcon.appiconset/Baby-icon@3x.png"; sourceTree = "<group>"; };
-		6361CBAD1E8CFAE300B8E121 /* DVMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageViewController.swift; sourceTree = "<group>"; };
-		636B5F5F1E8E5BFD000564AD /* UIViewController+Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Category.swift"; sourceTree = "<group>"; };
-		6376219E1E88BEE7004772A8 /* WebViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		632AF4AA1E94871900D1E325 /* UIViewController+Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Category.swift"; sourceTree = "<group>"; };
+		632AF4AC1E94871900D1E325 /* Baby-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Baby-icon.png"; sourceTree = "<group>"; };
+		632AF4AD1E94871900D1E325 /* Baby-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Baby-icon@2x.png"; sourceTree = "<group>"; };
+		632AF4AE1E94871900D1E325 /* Baby-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Baby-icon@3x.png"; sourceTree = "<group>"; };
+		632AF4B01E94871900D1E325 /* DVNewworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVNewworkRequest.swift; sourceTree = "<group>"; };
+		632AF4B21E94871900D1E325 /* DVGlobalDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGlobalDefine.swift; sourceTree = "<group>"; };
+		632AF4B41E94871900D1E325 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Sources/AppDelegate.swift; sourceTree = "<group>"; };
+		632AF4B71E94871900D1E325 /* DVBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVBannerView.swift; sourceTree = "<group>"; };
+		632AF4B81E94871900D1E325 /* DVMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageTableViewCell.swift; sourceTree = "<group>"; };
+		632AF4BA1E94871900D1E325 /* DVMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageViewController.swift; sourceTree = "<group>"; };
+		632AF4BB1E94871900D1E325 /* DVSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVSearchViewController.swift; sourceTree = "<group>"; };
+		632AF4BC1E94871900D1E325 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		632AF4BD1E94871900D1E325 /* WebViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		632AF4CB1E94878300D1E325 /* DVFirstMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVFirstMessageModel.swift; sourceTree = "<group>"; };
+		632AF4CD1E9487EE00D1E325 /* DVMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageModel.swift; sourceTree = "<group>"; };
+		632AF4D11E94881300D1E325 /* DVBannerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVBannerModel.swift; sourceTree = "<group>"; };
+		637E5C771E9723F200F68689 /* zan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zan@2x.png"; sourceTree = "<group>"; };
+		637E5C781E9723F200F68689 /* zan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zan@3x.png"; sourceTree = "<group>"; };
+		637E5C791E9723F200F68689 /* zaned@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zaned@2x.png"; sourceTree = "<group>"; };
+		637E5C7A1E9723F200F68689 /* zaned@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zaned@3x.png"; sourceTree = "<group>"; };
 		639EBA5F1E8615A700FB80E2 /* DVBannerView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DVBannerView.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		639EBA621E8615A700FB80E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		639EBA641E8615A700FB80E2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		639EBA671E8615A700FB80E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		639EBA691E8615A700FB80E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		639EBA6C1E8615A700FB80E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -75,8 +91,6 @@
 		639EBA7E1E8615A700FB80E2 /* DVBannerViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DVBannerViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		639EBA821E8615A700FB80E2 /* DVBannerViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVBannerViewUITests.swift; sourceTree = "<group>"; };
 		639EBA841E8615A700FB80E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		639EBA901E86172A00FB80E2 /* DVBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVBannerView.swift; sourceTree = "<group>"; };
-		639EBA921E865ADC00FB80E2 /* DVMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageTableViewCell.swift; sourceTree = "<group>"; };
 		73D4B64C7EA03ECFDA90E538 /* Pods-DVBannerViewUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerViewUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerViewUITests/Pods-DVBannerViewUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8B26C0F447A1C584D30F65E4 /* Pods-DVBannerViewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerViewTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerViewTests/Pods-DVBannerViewTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C4CC69533217F87C47F4B577 /* Pods-DVBannerView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DVBannerView.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DVBannerView/Pods-DVBannerView.debug.xcconfig"; sourceTree = "<group>"; };
@@ -121,20 +135,82 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		633D19ED1E8A49EC007748DC /* 网络 */ = {
+		632AF4A91E94871900D1E325 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				633D19E91E8A4212007748DC /* DVNewworkRequest.swift */,
+				632AF4AA1E94871900D1E325 /* UIViewController+Category.swift */,
 			);
-			name = "网络";
+			path = Category;
 			sourceTree = "<group>";
 		};
-		633D19EE1E8A49FD007748DC /* 全局 */ = {
+		632AF4AB1E94871900D1E325 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				633D19EB1E8A48FC007748DC /* DVGlobalDefine.swift */,
+				637E5C771E9723F200F68689 /* zan@2x.png */,
+				637E5C781E9723F200F68689 /* zan@3x.png */,
+				637E5C791E9723F200F68689 /* zaned@2x.png */,
+				637E5C7A1E9723F200F68689 /* zaned@3x.png */,
+				632AF4AC1E94871900D1E325 /* Baby-icon.png */,
+				632AF4AD1E94871900D1E325 /* Baby-icon@2x.png */,
+				632AF4AE1E94871900D1E325 /* Baby-icon@3x.png */,
 			);
-			name = "全局";
+			path = Images;
+			sourceTree = "<group>";
+		};
+		632AF4AF1E94871900D1E325 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				632AF4B01E94871900D1E325 /* DVNewworkRequest.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		632AF4B11E94871900D1E325 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				632AF4B21E94871900D1E325 /* DVGlobalDefine.swift */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
+		632AF4B31E94871900D1E325 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				632AF4B51E94871900D1E325 /* Model */,
+				632AF4B61E94871900D1E325 /* View */,
+				632AF4B91E94871900D1E325 /* ViewController */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		632AF4B51E94871900D1E325 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				632AF4CB1E94878300D1E325 /* DVFirstMessageModel.swift */,
+				632AF4CD1E9487EE00D1E325 /* DVMessageModel.swift */,
+				632AF4D11E94881300D1E325 /* DVBannerModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		632AF4B61E94871900D1E325 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				632AF4B71E94871900D1E325 /* DVBannerView.swift */,
+				632AF4B81E94871900D1E325 /* DVMessageTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		632AF4B91E94871900D1E325 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				632AF4BC1E94871900D1E325 /* ViewController.swift */,
+				632AF4BA1E94871900D1E325 /* DVMessageViewController.swift */,
+				632AF4BB1E94871900D1E325 /* DVSearchViewController.swift */,
+				632AF4BD1E94871900D1E325 /* WebViewViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 		639EBA561E8615A700FB80E2 = {
@@ -162,21 +238,14 @@
 		639EBA611E8615A700FB80E2 /* DVBannerView */ = {
 			isa = PBXGroup;
 			children = (
-				633D19ED1E8A49EC007748DC /* 网络 */,
-				633D19EE1E8A49FD007748DC /* 全局 */,
-				639EBA621E8615A700FB80E2 /* AppDelegate.swift */,
-				639EBA641E8615A700FB80E2 /* ViewController.swift */,
-				636B5F5F1E8E5BFD000564AD /* UIViewController+Category.swift */,
-				6361CBAD1E8CFAE300B8E121 /* DVMessageViewController.swift */,
-				639EBA901E86172A00FB80E2 /* DVBannerView.swift */,
-				633D19E71E89FECC007748DC /* DVSearchViewController.swift */,
-				639EBA921E865ADC00FB80E2 /* DVMessageTableViewCell.swift */,
-				6376219E1E88BEE7004772A8 /* WebViewViewController.swift */,
+				632AF4B31E94871900D1E325 /* Sources */,
+				632AF4A91E94871900D1E325 /* Category */,
+				632AF4AB1E94871900D1E325 /* Images */,
+				632AF4AF1E94871900D1E325 /* Network */,
+				632AF4B11E94871900D1E325 /* Others */,
+				632AF4B41E94871900D1E325 /* AppDelegate.swift */,
 				639EBA661E8615A700FB80E2 /* Main.storyboard */,
 				639EBA691E8615A700FB80E2 /* Assets.xcassets */,
-				633D19FE1E8A5E74007748DC /* Baby-icon.png */,
-				633D19FF1E8A5E74007748DC /* Baby-icon@2x.png */,
-				633D1A001E8A5E74007748DC /* Baby-icon@3x.png */,
 				639EBA6B1E8615A700FB80E2 /* LaunchScreen.storyboard */,
 				639EBA6E1E8615A700FB80E2 /* Info.plist */,
 			);
@@ -330,12 +399,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				633D1A011E8A5E74007748DC /* Baby-icon.png in Resources */,
+				637E5C7B1E9723F200F68689 /* zan@2x.png in Resources */,
+				632AF4BF1E94871900D1E325 /* Baby-icon.png in Resources */,
 				639EBA6D1E8615A700FB80E2 /* LaunchScreen.storyboard in Resources */,
 				639EBA6A1E8615A700FB80E2 /* Assets.xcassets in Resources */,
+				637E5C7C1E9723F200F68689 /* zan@3x.png in Resources */,
+				637E5C7D1E9723F200F68689 /* zaned@2x.png in Resources */,
 				639EBA681E8615A700FB80E2 /* Main.storyboard in Resources */,
-				633D1A031E8A5E74007748DC /* Baby-icon@3x.png in Resources */,
-				633D1A021E8A5E74007748DC /* Baby-icon@2x.png in Resources */,
+				637E5C7E1E9723F200F68689 /* zaned@3x.png in Resources */,
+				632AF4C11E94871900D1E325 /* Baby-icon@3x.png in Resources */,
+				632AF4C01E94871900D1E325 /* Baby-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,16 +571,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				636B5F601E8E5BFD000564AD /* UIViewController+Category.swift in Sources */,
-				6376219F1E88BEE7004772A8 /* WebViewViewController.swift in Sources */,
-				639EBA911E86172A00FB80E2 /* DVBannerView.swift in Sources */,
-				633D19EA1E8A4212007748DC /* DVNewworkRequest.swift in Sources */,
-				633D19E81E89FECC007748DC /* DVSearchViewController.swift in Sources */,
-				6361CBAE1E8CFAE300B8E121 /* DVMessageViewController.swift in Sources */,
-				639EBA931E865ADC00FB80E2 /* DVMessageTableViewCell.swift in Sources */,
-				633D19EC1E8A48FC007748DC /* DVGlobalDefine.swift in Sources */,
-				639EBA651E8615A700FB80E2 /* ViewController.swift in Sources */,
-				639EBA631E8615A700FB80E2 /* AppDelegate.swift in Sources */,
+				632AF4CA1E94871900D1E325 /* WebViewViewController.swift in Sources */,
+				632AF4C51E94871900D1E325 /* DVBannerView.swift in Sources */,
+				632AF4CC1E94878300D1E325 /* DVFirstMessageModel.swift in Sources */,
+				632AF4C61E94871900D1E325 /* DVMessageTableViewCell.swift in Sources */,
+				632AF4C41E94871900D1E325 /* AppDelegate.swift in Sources */,
+				632AF4C91E94871900D1E325 /* ViewController.swift in Sources */,
+				632AF4C31E94871900D1E325 /* DVGlobalDefine.swift in Sources */,
+				632AF4CE1E9487EE00D1E325 /* DVMessageModel.swift in Sources */,
+				632AF4BE1E94871900D1E325 /* UIViewController+Category.swift in Sources */,
+				632AF4C71E94871900D1E325 /* DVMessageViewController.swift in Sources */,
+				632AF4C81E94871900D1E325 /* DVSearchViewController.swift in Sources */,
+				632AF4C21E94871900D1E325 /* DVNewworkRequest.swift in Sources */,
+				632AF4D21E94881300D1E325 /* DVBannerModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

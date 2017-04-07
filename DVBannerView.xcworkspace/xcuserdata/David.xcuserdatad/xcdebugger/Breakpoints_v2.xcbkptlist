@@ -13,5 +13,53 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DVBannerView/Sources/ViewController/WebViewViewController.swift"
+            timestampString = "513252150.136898"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "setupDataBase()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DVBannerView.WebViewViewController.setupDataBase () -&gt; ()"
+                  moduleName = "DVBannerView"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iexin/Desktop/NewBannerView/DVBannerView/Sources/ViewController/WebViewViewController.swift"
+                  timestampString = "513252150.349696"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "119"
+                  endingLineNumber = "119"
+                  offsetFromSymbolStart = "4539">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DVBannerView.WebViewViewController.setupDataBase () -&gt; ()"
+                  moduleName = "DVBannerView"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iexin/Desktop/NewBannerView/DVBannerView/Sources/ViewController/WebViewViewController.swift"
+                  timestampString = "513252150.354095"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "119"
+                  endingLineNumber = "119"
+                  offsetFromSymbolStart = "4707">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -18,7 +18,6 @@ class DVMessageTableViewCell: UITableViewCell {
     var titleLabel = UILabel()
     var collectionButton = UIButton()
 
-    
     required init?(coder aDecoder:NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -73,7 +72,6 @@ class DVMessageTableViewCell: UITableViewCell {
         let url = URL(string:model.pic)
         self.leftImageView.kf.setImage(with:url)
         self.titleLabel.text = model.title
-//        print(model.title   )
         let iconImage = UIImage(named:"Baby-icon")?.withRenderingMode(.alwaysOriginal)
         self.collectionButton.setImage(iconImage, for: .normal)
         self.collectionButton.setTitle("\(model.praise)", for: .normal)
