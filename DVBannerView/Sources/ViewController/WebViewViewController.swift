@@ -11,14 +11,16 @@ import WebKit
 
 class WebViewViewController: UIViewController,WKNavigationDelegate
 {
+    let request = DVNewworkRequest()
     var webview = WKWebView()
     var model = DVMessageModel()
     var url:String = ""
     var newsID:Int = 0
     var datefolder:String = "0"
-    
     var isparise:Bool = false
     var praise:Int = 0
+    
+    var fromWhichDatabase:String = ""
     
     lazy var bottomView: UIView = {
        let view = UIView.init(frame: CGRect.init(x: 0, y:MainBounds.height - 44, width: MainBounds.width, height:44))
@@ -55,6 +57,10 @@ class WebViewViewController: UIViewController,WKNavigationDelegate
     }
     ///进入设置点赞状态
     func paiseBtnState() {
+        self.paiseBtn.setTitle("\(self.praise)", for: .normal)
+        self.paiseBtn.setImage(UIImage.init(named: "zan"), for: .normal)
+        self.paiseBtn.isEnabled = true
+        
         if self.isparise {
             self.paiseBtn.setImage(UIImage.init(named: "zaned"), for: .normal)
             self.paiseBtn.isEnabled = false
@@ -64,32 +70,20 @@ class WebViewViewController: UIViewController,WKNavigationDelegate
     func changePaiseBtnState() {
         self.paiseBtn.setImage(UIImage.init(named: "zaned"), for: .normal)
         self.paiseBtn.isEnabled = false
-        
+        loadUploadPaise()
         try! realm.write {
-            realm.create(DVMessageModel.self, value:["ispraise": true], update: true)
+            realm.create(DVMessageModel.self, value:["id":self.newsID,"ispraise": true,"praise": self.praise+1], update: true)
         }
+        
         self.paiseBtn.setTitle("\(self.praise+1)", for: .normal)
     }
     ///读取数据库，通过ID或者URL查找是否有数据，分两个表
     func setupDataBase() {
         ///通过ID查找
         if self.newsID != 0 {
-            let modelResults = realm.objects(DVBannerModel.self).filter("id = '\(self.newsID)'")
+            let modelResults = realm.objects(DVMessageModel.self).filter("id = \(self.newsID)")
             if modelResults.count == 0 {
-                let modelResult = realm.objects(DVMessageModel.self).filter("id = '\(self.newsID)'")
-                if modelResult.count == 0 {
-                    loadDataFromNet()
-                }else{
-                    if let p = modelResult.first?.praise {
-                        self.praise = p
-                    }
-                    if let ip = modelResult.first?.ispraise{
-                        self.isparise = ip
-                    }
-                    if let url = modelResult.first?.url{
-                        self.url = url
-                    }
-                }
+                loadDataFromNet()
             }else{
                 if let p = modelResults.first?.praise {
                     self.praise = p
@@ -104,38 +98,35 @@ class WebViewViewController: UIViewController,WKNavigationDelegate
         }
         ///通过URL查找
         else if self.url.isEmpty == false{
-            let modelResult = realm.objects(DVBannerModel.self).filter("url = '\(self.url)'")
-            if modelResult.count == 0 {
-                let modelResults = realm.objects(DVMessageModel.self).filter("url = '\(self.url)'")
-                if modelResults.count != 0 {
-                    if let p = modelResults.first?.praise {
-                        self.praise = p
-                    }
-                    if let ip = modelResults.first?.ispraise{
-                        self.isparise = ip
-                    }
-                }
-            }else{
-                if let p = modelResult.first?.praise {
-                    self.praise = p
-                }
-                if let ip = modelResult.first?.ispraise{
-                    self.isparise = ip
-                }
+            let modelResults = realm.objects(DVMessageModel.self).filter("url = '\(self.url)'")
+            if let p = modelResults.first?.praise {
+                self.praise = p
+            }
+            if let ip = modelResults.first?.ispraise{
+                self.isparise = ip
+            }
+            if let id = modelResults.first?.id{
+                self.newsID = id
             }
         }
-        setupData()
     }
     ///请求数据
     func setupData() {
-        self.paiseBtn.setTitle("\(self.praise)", for: .normal)
+       
         let url = NSURL(string: self.url)
         let request = NSURLRequest(url: url as! URL)
         webview.load(request as URLRequest)
     }
     ///请求网络数据
+    func loadUploadPaise() {
+        request.getRequest(urlString: MSG_pathParise, params: ["id":self.newsID], success: { (json) in
+            print(json)
+        }) { (error) in
+            print(error)
+        }
+    }
     func loadDataFromNet() {
-        let request = DVNewworkRequest()
+        
         request.getRequest(urlString: MSG_pathSearch, params: ["id":"\(newsID)","datefolder":datefolder], success: { (json) in
             if let dataArray = json["data"].array{
                 if dataArray.count != 0{
@@ -145,7 +136,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate
                         if let id = dataDic["id"].int{
                             model.id = id
                         }
-                        if let sortid = dataDic["sortid"].string{
+                        if let sortid = dataDic["sortid"].int{
                             model.sortid = sortid
                         }
                         if let title = dataDic["title"].string{
@@ -201,7 +192,30 @@ class WebViewViewController: UIViewController,WKNavigationDelegate
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
     }
-
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
+        if let url = navigationAction.request.url{
+            if let host = url.host{  //获取域名
+                print(host.lowercased())
+            }
+            print("url + \(url)")
+            
+            
+            let stringArray = url.absoluteString.components(separatedBy: "/")
+            let date = stringArray[6]
+            let index = stringArray.last?.index((stringArray.last?.startIndex)!, offsetBy: 6)
+            let did = stringArray.last?.substring(to: index!)
+            
+            self.datefolder = date
+            self.newsID = Int(did!)!
+            setupDataBase()
+            paiseBtnState()
+        }
+        
+        decisionHandler(WKNavigationActionPolicy.allow)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

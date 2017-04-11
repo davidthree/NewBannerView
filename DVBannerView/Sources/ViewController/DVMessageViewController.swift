@@ -23,7 +23,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     /// 列表滑动结束搜索
     var endFunc: endSearchFunc?
     /// 是否首页,0是首页
-    var newMenuListItem: Int = 0
+    var sortid: Int = 0
+//    var isFirstPage:Bool = true
     var currentIndex: Int = 0
     var messageListArray = [Any]()
     var bannerListArray = [Any]()
@@ -72,23 +73,23 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     /// 读取数据库
     func setupDataBase(){
-//        print(realm.configuration.fileURL?.absoluteString)
+        print(realm.configuration.fileURL?.absoluteString)
         setupDataBaseForList()
         setupDataBaseForBanner()
         
     }
     /// 读取列表数据库
     func setupDataBaseForList() {
-        var messageFirstItem:Results<DVFirstMessageModel>?
+        var messageFirstItem:Results<DVMessageModel>?
         var messageOtherItem:Results<DVMessageModel>?
         
-        if newMenuListItem == 0{
-            messageFirstItem = realm.objects(DVFirstMessageModel.self)
+        if sortid == 0{
+            messageFirstItem = realm.objects(DVMessageModel.self).filter("isHomepage = true")
         }else{
-            messageOtherItem = realm.objects(DVMessageModel.self).filter("sortid = '\(self.newMenuListItem)'")
+            messageOtherItem = realm.objects(DVMessageModel.self).filter("sortid = \(self.sortid)")
         }
         //列表
-        if newMenuListItem == 0 {
+        if sortid == 0 {
             if (messageFirstItem?.count ?? 0) >= 10 {
                 for i in 0...9 {
                     let model = messageFirstItem![i]
@@ -118,8 +119,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     /// 读取轮播图数据库
     func setupDataBaseForBanner(){
-        if newMenuListItem == 0{
-            let banneritem = realm.objects(DVBannerModel.self)
+        if sortid == 0{
+            let banneritem = realm.objects(DVMessageModel.self).filter("isBanner = true")
             if banneritem.count != 0 {
                 for model in banneritem {
                     self.imgURLArray.append(model.pic)
@@ -143,13 +144,7 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     /// 请求列表数据
     func loadListData(){
         let request = DVNewworkRequest()
-        var params = [String:String]()
-        if newMenuListItem == 0 {
-            params = [:]
-        }else{
-            params["sort"] = "\(newMenuListItem)"
-        }
-        request.getRequest(urlString: MSG_pathList as String, params:params, success: { (json) in
+        request.getRequest(urlString: MSG_pathList as String, params:["sort":"\(self.sortid)"], success: { (json) in
             self.messageListArray.removeAll()
             if let dataArray = json["data"].array{
                 if dataArray.count != 0{
@@ -160,7 +155,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
                             model.id = id
                         }
                         if let sortid = dataDic["sortid"].string{
-                            model.sortid = sortid
+                            let sid = Int(sortid)
+                            model.sortid = sid ?? 0
                         }
                         if let title = dataDic["title"].string{
                             model.title = title
@@ -198,13 +194,11 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
                         if let praise = praiseDic["\(model.id)"].int {
                             model.praise = praise
                         }
-                        self.messageListArray.append(model)
-                        try! realm.write {
-                            if self.newMenuListItem == 0{
-                                self.writeToRealmWithMessageModel(DVFirstMessageModel.self, model: model)
-                            }
-                        self.writeToRealmWithMessageModel(DVMessageModel.self, model: model)
+                        if self.sortid == 0{
+                            model.isHomepage = true
                         }
+                        self.messageListArray.append(model)
+                        self.writeToRealmWithMessageModel(DVMessageModel.self, model: model, sortid:self.sortid)
                     }
                 }
             }
@@ -217,24 +211,22 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     /// 请求轮播图数据
     func loadBannerData(){
-        guard self.newMenuListItem == 0 else {
+        guard self.sortid == 0 else {
             return
         }
         let request = DVNewworkRequest()
         request.getRequest(urlString: MSG_pathSlide, params: [:], success: { (json) in
-            
-            let banneritem = realm.objects(DVBannerModel.self)
-            try! realm.write{
-                realm.delete(banneritem)
-            }
             if let jsonArray = json.array{
+                
                 self.imgNameArray.removeAll()
                 self.imgURLArray.removeAll()
                 self.imgClickURLArray.removeAll()
+                
                 for dataDic in jsonArray{
-                    let model = DVBannerModel()
+                    let model = DVMessageModel()
                     if let newsid = dataDic["newsid"].string {
-                        model.newsid = newsid
+                        let nid = Int(newsid)
+                        model.id = nid ?? 0
                     }
                     if let datefolder = dataDic["datefolder"].string {
                         model.datefolder = datefolder
@@ -257,9 +249,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
                     if let summary = dataDic["summary"].string {
                         model.summary = summary
                     }
-                    try! realm.write{
-                        realm.create(DVBannerModel.self, value: model, update: true)
-                    }
+                    model.isBanner = true
+                    self.writeToRealmWithMessageModel(DVMessageModel.self, model: model, sortid:self.sortid)
                     self.imgNameArray.append(model.title)
                     self.imgURLArray.append(model.pic)
                     self.imgClickURLArray.append(model.url)
@@ -270,13 +261,6 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
             
         }
         
-    }
-    /// 更新Realm数据库
-    /// - Parameters:
-    ///     - modelObject:  表名
-    ///     - model:  DVMessageModel模型
-    func writeToRealmWithMessageModel(_ modelObject: Object.Type,model: DVMessageModel){
-        realm.create(modelObject, value: ["id":model.id,"sortid":model.sortid,"title":model.title,"titlesub":model.titlesub,"type":model.type,"datefolder":model.datefolder,"url":model.url,"pic":model.pic,"piclarge":model.piclarge,"picmore":model.picmore,"iscommend":model.iscommend,"istop":model.istop,"summary":model.summary,"praise":model.praise], update: true)
     }
     
     //MARK: -tableviewDelegate
@@ -290,7 +274,7 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
         return 0.01
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if newMenuListItem==0 {
+        if sortid==0 {
             return self.bannerView
         }else{
             return UIView.init()
@@ -298,7 +282,7 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
         
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if newMenuListItem==0 {
+        if sortid==0 {
             return TableViewHeaderHeight
         }else{
             return 0.01

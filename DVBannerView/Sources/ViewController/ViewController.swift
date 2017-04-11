@@ -72,7 +72,7 @@ class ViewController: UIViewController,UISearchBarDelegate,CAPSPageMenuDelegate 
         for i in 0...controllerTitleArray.count-1 {
             let controller : DVMessageViewController = DVMessageViewController()
             controller.title = controllerTitleArray[i]
-            controller.newMenuListItem = controllerTitleIDArray[i]
+            controller.sortid = controllerTitleIDArray[i]
             weak var weakself = self
             controller.myFunc = {(url) -> Void in
                 let web = WebViewViewController()

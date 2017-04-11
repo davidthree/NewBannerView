@@ -21,9 +21,7 @@
 		632AF4C81E94871900D1E325 /* DVSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BB1E94871900D1E325 /* DVSearchViewController.swift */; };
 		632AF4C91E94871900D1E325 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BC1E94871900D1E325 /* ViewController.swift */; };
 		632AF4CA1E94871900D1E325 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4BD1E94871900D1E325 /* WebViewViewController.swift */; };
-		632AF4CC1E94878300D1E325 /* DVFirstMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4CB1E94878300D1E325 /* DVFirstMessageModel.swift */; };
 		632AF4CE1E9487EE00D1E325 /* DVMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4CD1E9487EE00D1E325 /* DVMessageModel.swift */; };
-		632AF4D21E94881300D1E325 /* DVBannerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AF4D11E94881300D1E325 /* DVBannerModel.swift */; };
 		637E5C7B1E9723F200F68689 /* zan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C771E9723F200F68689 /* zan@2x.png */; };
 		637E5C7C1E9723F200F68689 /* zan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C781E9723F200F68689 /* zan@3x.png */; };
 		637E5C7D1E9723F200F68689 /* zaned@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637E5C791E9723F200F68689 /* zaned@2x.png */; };
@@ -73,9 +71,7 @@
 		632AF4BB1E94871900D1E325 /* DVSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVSearchViewController.swift; sourceTree = "<group>"; };
 		632AF4BC1E94871900D1E325 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		632AF4BD1E94871900D1E325 /* WebViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
-		632AF4CB1E94878300D1E325 /* DVFirstMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVFirstMessageModel.swift; sourceTree = "<group>"; };
 		632AF4CD1E9487EE00D1E325 /* DVMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVMessageModel.swift; sourceTree = "<group>"; };
-		632AF4D11E94881300D1E325 /* DVBannerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVBannerModel.swift; sourceTree = "<group>"; };
 		637E5C771E9723F200F68689 /* zan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zan@2x.png"; sourceTree = "<group>"; };
 		637E5C781E9723F200F68689 /* zan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zan@3x.png"; sourceTree = "<group>"; };
 		637E5C791E9723F200F68689 /* zaned@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zaned@2x.png"; sourceTree = "<group>"; };
@@ -186,9 +182,7 @@
 		632AF4B51E94871900D1E325 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				632AF4CB1E94878300D1E325 /* DVFirstMessageModel.swift */,
 				632AF4CD1E9487EE00D1E325 /* DVMessageModel.swift */,
-				632AF4D11E94881300D1E325 /* DVBannerModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -573,7 +567,6 @@
 			files = (
 				632AF4CA1E94871900D1E325 /* WebViewViewController.swift in Sources */,
 				632AF4C51E94871900D1E325 /* DVBannerView.swift in Sources */,
-				632AF4CC1E94878300D1E325 /* DVFirstMessageModel.swift in Sources */,
 				632AF4C61E94871900D1E325 /* DVMessageTableViewCell.swift in Sources */,
 				632AF4C41E94871900D1E325 /* AppDelegate.swift in Sources */,
 				632AF4C91E94871900D1E325 /* ViewController.swift in Sources */,
@@ -583,7 +576,6 @@
 				632AF4C71E94871900D1E325 /* DVMessageViewController.swift in Sources */,
 				632AF4C81E94871900D1E325 /* DVSearchViewController.swift in Sources */,
 				632AF4C21E94871900D1E325 /* DVNewworkRequest.swift in Sources */,
-				632AF4D21E94881300D1E325 /* DVBannerModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -47,7 +47,7 @@ class DVSearchViewController: UIViewController,UITableViewDataSource,UITableView
                         if let id = dataDic["id"].int{
                             model.id = id
                         }
-                        if let sortid = dataDic["sortid"].string{
+                        if let sortid = dataDic["sortid"].int{
                             model.sortid = sortid
                         }
                         if let title = dataDic["title"].string{
