@@ -10,10 +10,14 @@ import UIKit
 import Alamofire
 import RealmSwift
 import SwiftyJSON
+import RxSwift
+import RxCocoa
+import RxDataSources
+import Moya
 
-private let TableViewHeaderHeight:CGFloat = 360.0/640.0 * MainBounds.width
+let TableViewHeaderHeight:CGFloat = 360.0/640.0 * MainBounds.width
 
-class DVMessageViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class DVMessageViewController: UIViewController {
     
     typealias callbackFunc = (String) -> Void
     /// 点击返回父视图
@@ -24,8 +28,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     var endFunc: endSearchFunc?
     /// 是否首页,0是首页
     var sortid: Int = 0
-//    var isFirstPage:Bool = true
-    var currentIndex: Int = 0
+    /// 刷新Index
+    var currentIndex: Int = 1
     var messageListArray = [Any]()
     var bannerListArray = [Any]()
     
@@ -33,12 +37,27 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     var imgNameArray = [String]()
     var imgClickURLArray = [String]()
     
+    var messageFirstItem:Results<DVMessageModel>?
+    var banneritem:Results<DVMessageModel>?
+    
+    let dispose = DisposeBag()
+    let provider = RxMoyaProvider<ApiManager>()
+    
+    let messageArray = Variable([DVMessageModel()])
+
+    let identifier: String = "DVMessageCell"
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.bannerView.solveAHalfOfScrollView()
+    }
     //MARK:懒加载
     lazy var mainTableView: UITableView = {
         let tableView = UITableView.init(frame: CGRect.zero, style: UITableViewStyle.grouped)
         tableView.showsVerticalScrollIndicator = false
         tableView.delegate = self
-        tableView.dataSource = self
+        tableView.register(DVMessageTableViewCell.self, forCellReuseIdentifier: self.identifier)
+        tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(DVMessageViewController.headerRefresh))
+        tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(DVMessageViewController.footerRefresh))
         return tableView
     }()
     
@@ -50,69 +69,90 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
         return view
     }()
     
-    
     //MARK:内部方法
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.init(colorLiteralRed: 245/255.0, green: 245/255.0, blue: 245/255.0, alpha: 1)
-        self.automaticallyAdjustsScrollViewInsets = false
+
         self.setupView()
         self.setupDataBase()
         self.setupData()
         // Do any additional setup after loading the view.
     }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
+extension DVMessageViewController {
     /// 加载Tableview
     func setupView() {
+        self.view.backgroundColor = UIColor.init(colorLiteralRed: 245/255.0, green: 245/255.0, blue: 245/255.0, alpha: 1)
+        self.automaticallyAdjustsScrollViewInsets = false
+        
         self.view.addSubview(self.mainTableView)
-        self.mainTableView.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(self.view).offset(0)
-            make.top.equalTo(self.view).offset(0)
-            make.right.equalTo(self.view).offset(0)
-            make.bottom.equalTo(self.view).offset(0)
-        }
+        self.mainTableView.frame = CGRect.init(x: 0, y: 0, width: MainBounds.width, height: MainBounds.height-64-30);
+        messageArray.value.removeAll()
+        messageArray.asObservable().bindTo(self.mainTableView.rx.items(cellIdentifier: self.identifier, cellType: DVMessageTableViewCell.self)){ (row, model, cell) in
+            cell.setModel(DVMessageModel(value:model))
+            }.disposed(by: dispose)
+        
+        mainTableView.rx.modelSelected(DVMessageModel.self)
+            .subscribe( onNext: { (model) in
+                if (self.myFunc != nil){
+                    self.myFunc!(model.url)
+                }
+            }).disposed(by: dispose)
+        
+        mainTableView.rx.didScroll.subscribe( onNext: {
+            if (self.endFunc != nil) {
+                self.endFunc!()
+            }
+        }).disposed(by: dispose)
     }
+    
+    /// 加载轮播图数据
+    func setupBannerViewData(){
+        self.bannerView.imageURLGroup = self.imgURLArray
+        self.bannerView.imageNameGroup = self.imgNameArray
+
+    }
+    
+    func headerRefresh() {
+        self.currentIndex = 1
+        loadListData()
+    }
+    func footerRefresh() {
+        self.currentIndex += 1
+        loadListData()
+    }
+
+}
+extension DVMessageViewController {
     /// 读取数据库
     func setupDataBase(){
-        print(realm.configuration.fileURL?.absoluteString)
+        //        print(realm.configuration.fileURL?.absoluteString)
         setupDataBaseForList()
         setupDataBaseForBanner()
         
     }
     /// 读取列表数据库
     func setupDataBaseForList() {
-        var messageFirstItem:Results<DVMessageModel>?
-        var messageOtherItem:Results<DVMessageModel>?
-        
         if sortid == 0{
             messageFirstItem = realm.objects(DVMessageModel.self).filter("isHomepage = true")
         }else{
-            messageOtherItem = realm.objects(DVMessageModel.self).filter("sortid = \(self.sortid)")
+            messageFirstItem = realm.objects(DVMessageModel.self).filter("sortid = \(self.sortid)")
         }
-        //列表
-        if sortid == 0 {
-            if (messageFirstItem?.count ?? 0) >= 10 {
-                for i in 0...9 {
-                    let model = messageFirstItem![i]
-                    self.messageListArray.append(model)
-                }
-            }else{
-                if (messageFirstItem?.count ?? 0) != 0 {
-                    for model in messageFirstItem! {
-                        self.messageListArray.append(model)
-                    }
-                }
+        //列表 -- 不超过10条
+        if (messageFirstItem?.count ?? 0) >= 10 {
+            for i in 0...9 {
+                let model = messageFirstItem![i]
+                self.messageArray.value.append(model)
             }
         }else{
-            if (messageOtherItem?.count ?? 0) >= 10{
-                for i in 0...9 {
-                    let model = messageOtherItem![i]
-                    self.messageListArray.append(model)
-                }
-            }else{
-                if (messageOtherItem?.count ?? 0) != 0 {
-                    for model in messageOtherItem! {
-                        self.messageListArray.append(model)
-                    }
+            if (messageFirstItem?.count ?? 0) != 0 {
+                for model in messageFirstItem! {
+                    self.messageArray.value.append(model)
                 }
             }
         }
@@ -120,9 +160,9 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     /// 读取轮播图数据库
     func setupDataBaseForBanner(){
         if sortid == 0{
-            let banneritem = realm.objects(DVMessageModel.self).filter("isBanner = true")
-            if banneritem.count != 0 {
-                for model in banneritem {
+            banneritem = realm.objects(DVMessageModel.self).filter("isBanner = true")
+            if banneritem?.count != 0 {
+                for model in banneritem! {
                     self.imgURLArray.append(model.pic)
                     self.imgNameArray.append(model.title)
                     self.imgClickURLArray.append(model.url)
@@ -131,11 +171,8 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
             }
         }
     }
-    /// 加载轮播图数据
-    func setupBannerViewData(){
-        self.bannerView.imageURLGroup = self.imgURLArray
-        self.bannerView.imageNameGroup = self.imgNameArray
-    }
+}
+extension DVMessageViewController {
     /// 请求数据
     func setupData(){
         loadListData()
@@ -143,130 +180,86 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
     }
     /// 请求列表数据
     func loadListData(){
-        let request = DVNewworkRequest()
-        request.getRequest(urlString: MSG_pathList as String, params:["sort":"\(self.sortid)"], success: { (json) in
-            self.messageListArray.removeAll()
-            if let dataArray = json["data"].array{
-                if dataArray.count != 0{
-                    let praiseDic = json["praise"]
-                    for dataDic in dataArray{
-                        let model = DVMessageModel()
-                        if let id = dataDic["id"].int{
-                            model.id = id
+        provider
+            .request(.MSG_pathList(sortid: self.sortid, currentIndex: self.currentIndex))
+            .mapResponseToJSON()
+            .subscribe( onNext: { (json) in
+                self.mainTableView.mj_header.endRefreshing()
+                self.mainTableView.mj_footer.endRefreshing()
+                DispatchQueue.global().async {
+                    //移除数组，防止重复添加
+                    if let dataArray = json["data"].array{
+                        if dataArray.count != 0{
+                            let praiseDic = json["praise"]
+                            DispatchQueue.global().sync {
+                                if self.currentIndex == 1 {
+                                    self.messageArray.value.removeAll()
+                                }
+                                for dataDic in dataArray{
+                                    let model = DVMessageModel.init(dataDic: dataDic)
+                                    if let sortid = dataDic["sortid"].int{
+                                        let sid = Int(sortid)
+                                        model.sortid = sid
+                                    }
+                                    if let praise = praiseDic["\(model.id)"].int {
+                                        model.praise = praise
+                                    }
+                                    
+                                    self.writeToRealmWithMessageModel(DVMessageModel.self, model: model, sortid:self.sortid)
+                                    self.messageArray.value.append(model)
+                                }
+                            }
                         }
-                        if let sortid = dataDic["sortid"].string{
-                            let sid = Int(sortid)
-                            model.sortid = sid ?? 0
-                        }
-                        if let title = dataDic["title"].string{
-                            model.title = title
-                        }
-                        if let titlesub = dataDic["titlesub"].string{
-                            model.titlesub = titlesub
-                        }
-                        if let type = dataDic["type"].int{
-                            model.type = type
-                        }
-                        if let datefolder = dataDic["datefolder"].string{
-                            model.datefolder = datefolder
-                        }
-                        if let url = dataDic["url"].string{
-                            model.url = url
-                        }
-                        if let pic = dataDic["pic"].string{
-                            model.pic = pic
-                        }
-                        if let piclarge = dataDic["piclarge"].string{
-                            model.piclarge = piclarge
-                        }
-                        if let picmore = dataDic["picmore"].string{
-                            model.picmore = picmore
-                        }
-                        if let iscommend = dataDic["iscommend"].int{
-                            model.iscommend = iscommend
-                        }
-                        if let istop = dataDic["istop"].int{
-                            model.istop = istop
-                        }
-                        if let summary = dataDic["summary"].string{
-                            model.summary = summary
-                        }
-                        if let praise = praiseDic["\(model.id)"].int {
-                            model.praise = praise
-                        }
-                        if self.sortid == 0{
-                            model.isHomepage = true
-                        }
-                        self.messageListArray.append(model)
-                        self.writeToRealmWithMessageModel(DVMessageModel.self, model: model, sortid:self.sortid)
+                    }
+                    DispatchQueue.main.async {
+                        self.mainTableView.reloadData()
                     }
                 }
-            }
-            
-            self.mainTableView.reloadData()
-        }) { (error) in
-            
-        }
-        
+            })
+            .disposed(by: dispose)
     }
     /// 请求轮播图数据
     func loadBannerData(){
         guard self.sortid == 0 else {
             return
         }
-        let request = DVNewworkRequest()
-        request.getRequest(urlString: MSG_pathSlide, params: [:], success: { (json) in
-            if let jsonArray = json.array{
-                
-                self.imgNameArray.removeAll()
-                self.imgURLArray.removeAll()
-                self.imgClickURLArray.removeAll()
-                
-                for dataDic in jsonArray{
-                    let model = DVMessageModel()
-                    if let newsid = dataDic["newsid"].string {
-                        let nid = Int(newsid)
-                        model.id = nid ?? 0
+        provider
+            .request(.MSG_pathSlide)
+            .mapResponseToJSON()
+            .subscribe( onNext: { (json) in
+                if (self.banneritem?.count != 0) {
+                    for model in self.banneritem! {
+                        try! realm.write {
+                            model.isBanner = false
+                        }
                     }
-                    if let datefolder = dataDic["datefolder"].string {
-                        model.datefolder = datefolder
-                    }
-                    if let praise = dataDic["praise"].int {
-                        model.praise = praise
-                    }
-                    if let title = dataDic["title"].string {
-                        model.title = title
-                    }
-                    if let newstitle = dataDic["newstitle"].string {
-                        model.newstitle = newstitle
-                    }
-                    if let url = dataDic["url"].string {
-                        model.url = url
-                    }
-                    if let pic = dataDic["pic"].string {
-                        model.pic = pic
-                    }
-                    if let summary = dataDic["summary"].string {
-                        model.summary = summary
-                    }
-                    model.isBanner = true
-                    self.writeToRealmWithMessageModel(DVMessageModel.self, model: model, sortid:self.sortid)
-                    self.imgNameArray.append(model.title)
-                    self.imgURLArray.append(model.pic)
-                    self.imgClickURLArray.append(model.url)
-                    self.setupBannerViewData()
                 }
-            }
-        }) { (error) in
-            
-        }
-        
+                if let jsonArray = json.array{
+                    DispatchQueue.global().async {
+                        //移除数组，防止重复添加
+                        self.imgNameArray.removeAll()
+                        self.imgURLArray.removeAll()
+                        self.imgClickURLArray.removeAll()
+                        for dataDic in jsonArray{
+                            let model = DVMessageModel.init(dataDic: dataDic)
+                            self.writeToRealmWithMessageModel(DVMessageModel.self, model: model, sortid:self.sortid)
+                            self.imgNameArray.append(model.title)
+                            self.imgURLArray.append(model.pic)
+                            self.imgClickURLArray.append(model.url)
+                        }
+                        DispatchQueue.main.async {
+                            self.setupBannerViewData()
+                        }
+                    }
+                    
+                }
+            })
+            .disposed(by: dispose)
     }
+}
+
+extension DVMessageViewController: UITableViewDelegate {
     
-    //MARK: -tableviewDelegate
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
@@ -288,44 +281,4 @@ class DVMessageViewController: UIViewController,UITableViewDataSource,UITableVie
             return 0.01
         }
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messageListArray.count
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = self.messageListArray[indexPath.row] as! DVMessageModel
-        if (self.myFunc != nil){
-            self.myFunc!(model.url)
-        }
-        
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell  {
-        let initIdentifier = "reuseID"
-        var cell:DVMessageTableViewCell! = tableView.dequeueReusableCell(withIdentifier: initIdentifier) as? DVMessageTableViewCell
-        if cell == nil {
-            cell = DVMessageTableViewCell(style:.default,reuseIdentifier:initIdentifier)
-        }
-        let model = self.messageListArray[indexPath.row]
-        cell.setModel(DVMessageModel(value:model))
-            return cell
-    }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (self.endFunc != nil) {
-            self.endFunc!()
-        }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    /*
-    // MARK: - Navigation
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

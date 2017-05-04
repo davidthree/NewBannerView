@@ -8,6 +8,11 @@ pod 'Alamofire'
 pod 'PageMenu'
 pod 'SwiftyJSON'
 pod 'RealmSwift'
+pod 'RxSwift'
+pod 'RxCocoa'
+pod 'RxDataSources'
+pod 'Moya/RxSwift'
+pod 'ObjectMapper'
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 

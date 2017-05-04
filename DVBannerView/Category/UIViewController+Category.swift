@@ -21,14 +21,16 @@ extension UIViewController {
         UIGraphicsEndImageContext();
         return image;
     }
+    
     /// 更新Realm数据库
     /// - Parameters:
     ///     - modelObject:  表名
     ///     - model:  DVMessageModel模型
     func writeToRealmWithMessageModel(_ modelObject: Object.Type, model: DVMessageModel, sortid: Int){
+        let realm = try! Realm()
         try! realm.write{
+            //            realm.create(modelObject, value:"")
             if model.isBanner {
-                
                 realm.create(modelObject, value: ["id":model.id,"datefolder":model.datefolder,"praise":model.praise,"title":model.title,"newstitle":model.newstitle,"url":model.url,"pic":model.pic,"summary":model.summary,"isBanner":true], update: true)
             }
             if sortid == 0 {
@@ -39,6 +41,4 @@ extension UIViewController {
             }
         }
     }
-    
-    
-}
+} 

@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RxSwift
 
 class DVBannerView: UIView ,UIScrollViewDelegate{
     let ImageWidth: CGFloat = UIScreen.main.bounds.width
@@ -23,16 +24,12 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
     var timer: DispatchSourceTimer?
     typealias callbackfunc = (Int) -> Void
     var myFunc:callbackfunc?
-
+    
+    let dispose = DisposeBag()
     //MARK: -可选属性
     /// 是否自动滚动，默认为YES
-    var autoScroll: Bool? {
-        didSet{
-            if autoScroll == false{
-                self.timer?.cancel()
-            }
-        }
-    }
+    var autoScroll = Variable(true)
+
     /// 是否显示分页控件，默认为YES
     var showPageControl: Bool? {
         didSet{
@@ -83,7 +80,6 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
         scrollView.isPagingEnabled = true
         scrollView.delegate = self
         scrollView.decelerationRate = 1
-        scrollView.setContentOffset(CGPoint.init(x: UIScreen.main.bounds.width, y: 0), animated: false)
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
@@ -120,7 +116,7 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
     ///初始化参数
     func initialization() {
         self.backgroundColor = UIColor.clear
-        self.autoScroll = true
+        self.autoScroll.value = true
         self.showPageControl = true
         self.hidesForSinglePage = true
         startTimer()
@@ -159,17 +155,39 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
             make.bottom.equalToSuperview().offset(-HeightEdge)
             make.height.equalTo(PageControlHeight)
         }
+        
+        autoScroll.asObservable().subscribe ( onNext: { (value) in
+            if value == false{
+                self.timer?.cancel()
+            }
+        }).disposed(by: dispose)
+    }
+    //解决轮播图有时候卡屏
+    func solveAHalfOfScrollView () {
+        
+        let offsetIndex = self.bannerView.contentOffset.x.truncatingRemainder(dividingBy: MainBounds.width)
+        if offsetIndex != 0 {
+            let intOfOffset = Int(self.bannerView.contentOffset.x / MainBounds.width)
+            
+            if offsetIndex > 0.5 {
+                self.bannerView.setContentOffset(CGPoint.init(x: Int(MainBounds.width) * (intOfOffset+1), y: 0), animated: false)
+            }else if offsetIndex > 0 && offsetIndex <= 0.5 {
+                self.bannerView.setContentOffset(CGPoint.init(x: Int(MainBounds.width) * (intOfOffset), y: 0), animated: false)
+            }
+        }
     }
     // MARK: -私有方法
         func createImageList() {
             guard (imageURLGroup?.count ?? 0) > 0 else {
                 return
             }
+            self.removeFromSuperview()
             if self.imageURLGroup!.count==1{
                 self.bannerView.contentSize = CGSize.init(width: ImageWidth*1, height: ImageHeight)
             }else if self.imageURLGroup!.count > 1{
                 self.bannerView.contentSize = CGSize.init(width: ImageWidth*(CGFloat(self.imageURLGroup!.count)+2), height: ImageHeight)
             }
+            self.bannerView.setContentOffset(CGPoint.init(x: UIScreen.main.bounds.width, y: 0), animated: false)
             if self.imageURLGroup!.count == 1 {
                 let imageView = UIImageView()
                 self.bannerView.addSubview(imageView)
@@ -279,10 +297,11 @@ class DVBannerView: UIView ,UIScrollViewDelegate{
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
                                   willDecelerate decelerate: Bool){
-        if scrollView == self.bannerView && self.autoScroll == true{
+        if scrollView == self.bannerView && self.autoScroll.value == true{
             self.startTimer()
         }
     }
+    
 
 
 }

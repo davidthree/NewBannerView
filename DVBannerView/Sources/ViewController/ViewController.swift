@@ -18,8 +18,8 @@ class ViewController: UIViewController,UISearchBarDelegate,CAPSPageMenuDelegate 
     var searchBar = UISearchBar()
     var pageMenu: CAPSPageMenu?
     var controllerArray : [UIViewController] = []
-    var controllerTitleArray = ["首页","国际足球","中国足球","赛前","转会状态","7M制造","彩票"]
-    var controllerTitleIDArray = [0,1,2,5,3,6,4]
+    let controllerTitleArray = ["首页","国际足球","中国足球","赛前","转会状态","7M制造","彩票"]
+    let controllerTitleIDArray = [0,1,2,5,3,6,4]
     
     // MARK: -懒加载
     lazy var searchBackgroundView : UIView = {
@@ -38,7 +38,6 @@ class ViewController: UIViewController,UISearchBarDelegate,CAPSPageMenuDelegate 
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.view.backgroundColor = UIColor.init(colorLiteralRed: 245/255.0, green: 245/255.0, blue: 245/255.0, alpha: 1)
-        self.automaticallyAdjustsScrollViewInsets = false
         self.setupSearch()
         self.setupControllerArray()
     }
@@ -96,7 +95,7 @@ class ViewController: UIViewController,UISearchBarDelegate,CAPSPageMenuDelegate 
             .selectedMenuItemLabelColor(UIColor.blue)
         ]
         
-        pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: CGRect.init(x: 0, y: 64, width: self.view.frame.size.width, height: self.view.frame.size.height-64.0), pageMenuOptions: parameters)
+        pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: CGRect.init(x: 0, y: 64, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height-64.0), pageMenuOptions: parameters)
         self.view.addSubview(pageMenu!.view)
     }
     @IBAction func searchAction(_ sender: Any) {
